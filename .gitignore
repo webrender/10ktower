@@ -1,0 +1,28 @@
+# Temporary
+*~
+tmp
+.tmp
+build
+
+# OS Generated
+.DS_Store
+.dir-locals.el
+.figleaf
+Thumbs.db
+
+# Editor / IDE
+.idea
+.ropeproject
+*.sublime-workspace
+*.sublime-project
+.*.sw*
+
+# Fetched
+node_modules
+bower_components
+*/locale
+
+# Other
+npm-debug.log
+*/settings/local.yaml
+dist/

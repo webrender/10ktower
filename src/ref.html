@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="//cdn.jsdelivr.net/emojione/2.2.6/lib/js/emojione.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/emojione/2.2.6/assets/css/emojione.min.css"/>
+</head>
+<body>
+<span><b>Condo</b></span><br>
+<span><tt>Hotel</tt></span><br>
+<span><code>Office</code></span><br>
+<span><strong>Restaurant</strong></span><br>
+<span><strong>Shop</strong></span><br>
+<span><strong>Theatre</strong></span><br>
+<span><i>Security</i></span><br>
+<span><i>Medical</i></span><br>
+<span><i>Housekeeping</i></span><br><br>
+<strong>red</strong>
+<b>darkred</b>
+<code>teal</code>
+<i>blue</i>
+<tt>pink</tt>
+<a href="">green/yellow</a>
+white
+<br>
+<br>
+<form>
+  <input type="radio" name="gender" value="male" checked><Strong>Male</Strong><br>
+  <input type="radio" name="gender" value="female"> Female<br>
+  <input type="radio" name="gender" value="other"> Other
+</form><br>
+<div id="emojis">
+:door:Condo :sleeping_accommodation: Hotel :file_cabinet:Office :hamburger:Restaurant :shopping_bags:Shop :projector:Theatre :rotating_light:Security :helmet_with_cross:Medical :recycle:Housekeeping
+</div>
+<script type="text/javascript">
+var input = document.getElementById('emojis').innerHTML;
+var output = emojione.shortnameToImage(input);
+document.getElementById('emojis').innerHTML = output;
+</script>
+</body>
+</html>
