@@ -37,7 +37,7 @@ module.exports = function(grunt) {
                 collapseWhitespace: true
             },
             files: {
-                'dist/index.html': 'dist/index.html'
+                'dist/index.css': 'dist/index.css'
             }
         }
     },
@@ -48,8 +48,17 @@ module.exports = function(grunt) {
         }
     },
     watch: {
-      files: ['src/*'],
-      tasks: ['copy', 'htmlmin', 'less', 'cssmin', 'inline']
+      client: {
+        files: ['src/*.*'],
+        tasks: ['copy', 'htmlmin', 'less', 'cssmin', 'inline']
+      },
+      server: {
+        files: ['index.js'],
+        tasks: ['express:main'],
+        options: {
+          spawn: false
+        }
+      }
     },
     express: {
         main: {
@@ -57,17 +66,25 @@ module.exports = function(grunt) {
                 script: 'index.js'
             }
         }
+    },
+    rename: {
+      main: {
+        files: [
+          {src: 'dist/index.html', dest: 'dist/index.mustache'}
+        ]
+      }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-rename');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-inline');
   grunt.loadNpmTasks('grunt-express-server');
 
-  grunt.registerTask('server', ['copy', 'htmlmin', 'less', 'inline', 'express', 'watch']);
+  grunt.registerTask('server', ['copy', 'htmlmin', 'less', 'inline', 'rename', 'express', 'watch']);
 
 };

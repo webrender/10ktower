@@ -10,7 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "compression": "^1.6.2",
-    "express": "^4.14.0"
+    "express": "^4.14.0",
+    "mustache-express": "^1.2.2"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

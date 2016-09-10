@@ -12,6 +12,16 @@ body {
     background-attachment: fixed;
     color: white;
 }
+body:before {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: -1px;
+    left:0;
+    height: 100px;
+    width: 100%;
+    background: url('i.svg') ~"0px 100px/100px auto";
+}
 tt {
     color: fuchsia;
 }
@@ -22,9 +32,11 @@ i {
     font-style: normal;
     color: blue;
 }
+// Lynx-Only
 .lo {
     display: none !important;
 }
+// Floors
 .f, .bt, .af, .bb {
     display: block;
 }
@@ -76,32 +88,56 @@ i {
     left: 0;
     z-index:-1;
 }
-.f.-h:before {
-    background: #FFAAFF;
+.f.-h {
+    background-color: #FFAAFF;
 }
-.f.-e:before {
-    background: #333333;
+.f.-h:before {
+    background: url('i.svg') ~"176px -869px/100px auto" no-repeat;
+}
+.f.-m {
+    background-color: #AAAAFF;
 }
 .f.-m:before {
-    background: #AAAAFF;
+    background: url('i.svg') ~"184px -517px/100px auto" no-repeat;
+}
+.f.-r {
+    background-color: #FFAAAA;
 }
 .f.-r:before {
-    background: #FFAAAA;
+    background: url('i.svg') ~"176px -691px/100px auto" no-repeat;
+}
+.f.-c {
+    background-color: #AAFFFF;
 }
 .f.-c:before {
-    background: #AAFFFF;
+    background: url('i.svg') ~"176px -944px/100px auto" no-repeat;
+}
+.f.-e {
+    background-color: #333333;
+}
+.f.-e:before {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+.f:before {
+    opacity: 0.3;
+    background-color: #FFFFFF !important;
+}
+.f:hover:before {
+    opacity: 0.8;
+    background-color: transparent !important;
 }
 .h {
-    object-position: 0 -23px;
+    object-position: 0 -25px;
 }
 .s {
-    object-position: 0 1px;
+    object-position: 0 0;
 }
 .n {
-    object-position: 0 -47px;
+    object-position: 0 -50px;
 }
 .e {
-    object-position: 0 -71px;
+    object-position: 0 -75px;
 }
 strong {
     font-weight: normal;
