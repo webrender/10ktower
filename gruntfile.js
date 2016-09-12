@@ -50,7 +50,10 @@ module.exports = function(grunt) {
     watch: {
       client: {
         files: ['src/*.*'],
-        tasks: ['copy', 'htmlmin', 'less', 'cssmin', 'inline']
+        tasks: ['copy', 'htmlmin', 'less', 'inline', 'rename', 'express:main'],
+        options: {
+          spawn: false
+        }
       },
       server: {
         files: ['index.js'],

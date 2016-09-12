@@ -32,6 +32,10 @@ i {
     font-style: normal;
     color: blue;
 }
+b {
+    font-weight: normal;
+    color: #990000;
+}
 // Lynx-Only
 .lo {
     display: none !important;
@@ -44,7 +48,7 @@ i {
     text-indent: -1000%;
 }
 .f, .af, .bb {
-    color: grey;
+    color: #CCCCCC;
     background: black;
     border: 1px solid #222;
     border-bottom: none;
@@ -107,10 +111,16 @@ i {
     background: url('i.svg') ~"176px -691px/100px auto" no-repeat;
 }
 .f.-c {
-    background-color: #AAFFFF;
+    background-color: #FF9999;
 }
 .f.-c:before {
     background: url('i.svg') ~"176px -944px/100px auto" no-repeat;
+}
+.f.-o {
+    background-color: #AAFFFF;
+}
+.f.-o:before {
+    background: url('i.svg') ~"176px -1141px/100px auto" no-repeat;
 }
 .f.-e {
     background-color: #333333;
@@ -118,6 +128,9 @@ i {
 .f.-e:before {
     filter: grayscale(100%);
     -webkit-filter: grayscale(100%);
+}
+.f.-l {
+    background-color: #FFFFCC;
 }
 .f:before {
     opacity: 0.3;
@@ -131,13 +144,13 @@ i {
     object-position: 0 -25px;
 }
 .s {
-    object-position: 0 0;
+    object-position: 0 -75px;
 }
 .n {
     object-position: 0 -50px;
 }
 .e {
-    object-position: 0 -75px;
+    object-position: 0 0;
 }
 strong {
     font-weight: normal;

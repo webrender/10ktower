@@ -1,0 +1,181 @@
+{
+    "ticks":0,
+    "cash":10000,
+    "floors": [
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"bad"
+        },
+        {
+            "type": "Condo",
+            "occupied": false,
+            "qol":"bad"
+        },
+        {
+            "type": "Restaurant",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"bad"
+        },
+        {
+            "type": "Hotel",
+            "occupied": false,
+            "qol":"bad"
+        },
+        {
+            "type": "Housekeeping"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        },{
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Office",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Condo",
+            "occupied": true,
+            "qol":"bad"
+        },
+        {
+            "type": "Condo",
+            "occupied": false,
+            "qol":"bad"
+        },
+        {
+            "type": "Restaurant",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"bad"
+        },
+        {
+            "type": "Hotel",
+            "occupied": false,
+            "qol":"bad"
+        },
+        {
+            "type": "Housekeeping"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"neutral"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        },
+        {
+            "type": "Hotel",
+            "occupied": true,
+            "qol":"good"
+        }
+    ]
+}
