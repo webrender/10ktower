@@ -15,8 +15,8 @@ app.set('views','./dist');
 
 app.get('/', function (req, res) {
     if (req.query.f) {
-        // floor page
-        floor(req,res);
+        // level` page
+        level(req,res);
     } else if (req.query.t) {
         // tick handler
         tick(req,res);
@@ -44,16 +44,33 @@ var tick = function(req, res) {
     }
 }
 
-var floor = function(req, res) {
-    // if floor doesnt exist, add floor
-    // if floor exists but unit is null, present unit selection dialog
-    // if floor exists, unit is null, 'u' parameter exists, create unit on floor (or delete unit)
-    // if floor & unit exist, present floor info
+var level = function(req, res) {
+    fs.readFile('tower.json', 'utf8', function(err, data) {
+        tower = JSON.parse(data);
+
+        if (req.query.f > tower.floors.length) {
+            // floor doesn't exist - add floor
+            if (tower.cash >= 500) {
+                tower.cash = tower.cash - 500
+                tower.floors.push({});
+                fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+                    res.redirect('/');
+                })
+            }
+        }
+
+        // if floor doesnt exist, add floor
+        // if floor exists but unit is null, present unit selection dialog
+        // if floor exists, unit is null, 'u' parameter exists, create unit on floor (or delete unit)
+        // if floor & unit exist, present floor info
+    });
 }
 
 var index = function(req, res) {
     fs.readFile('tower.json', 'utf8', function(err, data) {
         tower = JSON.parse(data);
+        tower.floors = tower.floors.reverse();
+        tower.height = tower.floors.length + 1;
 
         if (req.query.l)
             var l = req.query.l < 14 ? 14 : req.query.l;
@@ -157,7 +174,7 @@ var index = function(req, res) {
         }
 
         tower.floorPadding = function() {
-            var numSpaces = 13 - this.type.length;
+            var numSpaces = this.type && this.type.length ? 13 - this.type.length : 13;
             var paddingStr = "";
             for (i=0; i<numSpaces; i++) {
                 paddingStr += "&nbsp;";
@@ -189,7 +206,6 @@ var index = function(req, res) {
                     begPad += "&nbsp;";
                 }
             }
-            console.log(begPad, endPad);
             return {"beg":beg, "end":end, "begPad":begPad, "endPad":endPad}
         }
 
