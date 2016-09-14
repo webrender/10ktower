@@ -13,6 +13,19 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views','./dist');
 
+
+//  /$$$$$$$                        /$$     /$$
+// | $$__  $$                      | $$    |__/
+// | $$  \ $$  /$$$$$$  /$$   /$$ /$$$$$$   /$$ /$$$$$$$   /$$$$$$
+// | $$$$$$$/ /$$__  $$| $$  | $$|_  $$_/  | $$| $$__  $$ /$$__  $$
+// | $$__  $$| $$  \ $$| $$  | $$  | $$    | $$| $$  \ $$| $$  \ $$
+// | $$  \ $$| $$  | $$| $$  | $$  | $$ /$$| $$| $$  | $$| $$  | $$
+// | $$  | $$|  $$$$$$/|  $$$$$$/  |  $$$$/| $$| $$  | $$|  $$$$$$$
+// |__/  |__/ \______/  \______/    \___/  |__/|__/  |__/ \____  $$
+//                                                        /$$  \ $$
+//                                                       |  $$$$$$/
+//                                                        \______/
+
 app.get('/', function (req, res) {
     if (req.query.f) {
         // level` page
@@ -30,6 +43,15 @@ app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
 });
 
+//  /$$$$$$$$ /$$           /$$
+// |__  $$__/|__/          | $$
+//    | $$    /$$  /$$$$$$$| $$   /$$
+//    | $$   | $$ /$$_____/| $$  /$$/
+//    | $$   | $$| $$      | $$$$$$/
+//    | $$   | $$| $$      | $$_  $$
+//    | $$   | $$|  $$$$$$$| $$ \  $$
+//    |__/   |__/ \_______/|__/  \__/
+
 var tick = function(req, res) {
     // tick eval goes here
     if (req.xhr) {
@@ -44,6 +66,15 @@ var tick = function(req, res) {
     }
 }
 
+//  /$$                                     /$$
+// | $$                                    | $$
+// | $$        /$$$$$$  /$$    /$$ /$$$$$$ | $$
+// | $$       /$$__  $$|  $$  /$$//$$__  $$| $$
+// | $$      | $$$$$$$$ \  $$/$$/| $$$$$$$$| $$
+// | $$      | $$_____/  \  $$$/ | $$_____/| $$
+// | $$$$$$$$|  $$$$$$$   \  $/  |  $$$$$$$| $$
+// |________/ \_______/    \_/    \_______/|__/
+
 var level = function(req, res) {
     fs.readFile('tower.json', 'utf8', function(err, data) {
         tower = JSON.parse(data);
@@ -55,7 +86,75 @@ var level = function(req, res) {
                 tower.floors.push({});
                 fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
                     res.redirect('/');
-                })
+                });
+            } else {
+                // need an error state
+                res.redirect('/?l=' + req.query.f);
+            }
+        } else {
+            var idx = req.query.f - 1;
+            if (tower.floors[idx].type) {
+                //floor info
+            } else {
+                //empty floor
+                if (req.query.u) {
+                    // picker submission
+                    var type, cost;
+                    switch (req.query.u){
+                        case 'c':
+                            type = 'Condo';
+                            cost = 80000;
+                            break;
+                        case 'o':
+                            type = 'Office';
+                            cost = 40000;
+                            break;
+                        case 'h':
+                            type = 'Hotel';
+                            cost = 50000;
+                            break;
+                        case 'm':
+                            type = 'Housekeeping';
+                            cost = 50000;
+                            break;
+                        case 'p':
+                            type = 'Security';
+                            cost = 100000;
+                            break;
+                        case 'd':
+                            type = 'Medical';
+                            cost = 500000;
+                            break;
+                        case 'r':
+                            type = 'Restaurant';
+                            cost = 100000;
+                            break;
+                        case 's':
+                            type = 'Shop';
+                            cost = 100000;
+                            break;
+                        case 't':
+                            type = 'Theatre';
+                            cost = 500000;
+                            break;
+                    }
+                    tower.floors[idx] = {
+                        type: type,
+                        occupied: false
+                    }
+                    if (tower.cash >= cost) {
+                        tower.cash = tower.cash - cost;
+                        fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+                            res.redirect('/?l=' + req.query.f);
+                        });
+                    } else {
+                        // need an error state
+                        res.redirect('/?l=' + req.query.f);
+                    }
+                } else {
+                    // picker
+                    res.render('picker',{floor: idx+1});
+                }
             }
         }
 
@@ -65,6 +164,15 @@ var level = function(req, res) {
         // if floor & unit exist, present floor info
     });
 }
+
+//   /$$$$$$   /$$                 /$$     /$$
+//  /$$__  $$ | $$                | $$    |__/
+// | $$  \__//$$$$$$    /$$$$$$  /$$$$$$   /$$  /$$$$$$$
+// |  $$$$$$|_  $$_/   |____  $$|_  $$_/  | $$ /$$_____/
+//  \____  $$ | $$      /$$$$$$$  | $$    | $$| $$
+//  /$$  \ $$ | $$ /$$ /$$__  $$  | $$ /$$| $$| $$
+// |  $$$$$$/ |  $$$$/|  $$$$$$$  |  $$$$/| $$|  $$$$$$$
+//  \______/   \___/   \_______/   \___/  |__/ \_______/
 
 var index = function(req, res) {
     fs.readFile('tower.json', 'utf8', function(err, data) {
@@ -76,14 +184,20 @@ var index = function(req, res) {
             var l = req.query.l < 14 ? 14 : req.query.l;
 
         //tower floor calc
-        idx = l && tower.floors.length >= l ? l : tower.floors.length;
+        var idx = l && tower.floors.length >= l ? l : tower.floors.length;
+        var floor;
+
         tower.floor = function() {
             floor = idx;
             idx--;
-            var str = "" + floor
-            var pad = "00"
-            floor = pad.substring(0, pad.length - str.length) + str
             return floor;
+        }
+
+        tower.floor_padded = function() {
+            var str = "" + floor;
+            var pad = "00";
+            floor_padded = pad.substring(0, pad.length - str.length) + str;
+            return floor_padded;
         }
 
         if (tower.floors.length > 14) {
@@ -114,7 +228,7 @@ var index = function(req, res) {
                     ret = '-r';
                     break;
             }
-            if (this.occupied === false ) {
+            if (this.occupied === false || !this.type ) {
                 ret += ' -e';
             }
             return ret;
@@ -122,20 +236,16 @@ var index = function(req, res) {
 
         tower.qolHtml = function() {
             if (this.qol) {
-                if (this.occupied) {
-                    switch (this.qol) {
-                        case 'good':
-                            return '<img src="i.svg" class="h" alt=":)">';
-                            break;
-                        case 'bad':
-                            return '<img src="i.svg" class="s" alt=":(">';
-                            break;
-                        case 'neutral':
-                            return '<img src="i.svg" class="n" alt=":|">';
-                            break;
-                    }
-                } else {
-                    return '<img src="i.svg" class="e" alt=" &nbsp;&nbsp; ">';
+                switch (this.qol) {
+                    case 'good':
+                        return '<img src="i.svg" class="h" alt=":)">';
+                        break;
+                    case 'bad':
+                        return '<img src="i.svg" class="s" alt=":(">';
+                        break;
+                    case 'neutral':
+                        return '<img src="i.svg" class="n" alt=":|">';
+                        break;
                 }
             } else {
                 return '<span class="sp"> &nbsp;&nbsp; </span>';
@@ -167,19 +277,22 @@ var index = function(req, res) {
                         return '<code>Office</code>';
                         break;
                     default:
-                        return this.type;
+                        return 'Empty Floor';
                         break;
                 }
             }
         }
 
         tower.floorPadding = function() {
-            var numSpaces = this.type && this.type.length ? 13 - this.type.length : 13;
-            var paddingStr = "";
-            for (i=0; i<numSpaces; i++) {
-                paddingStr += "&nbsp;";
+            if (this.type) {
+                var numSpaces = this.type.length ? 13 - this.type.length : 13;
+                var paddingStr = "";
+                for (i=0; i<numSpaces; i++) {
+                    paddingStr += "&nbsp;";
+                }
+                return paddingStr;
             }
-            return paddingStr;
+            return '&nbsp;&nbsp;';
         }
 
         tower.floorDown = function () {
@@ -234,6 +347,10 @@ var index = function(req, res) {
                 }
             }
             return {"beg":beg, "end":end, "begPad":begPad, "endPad":endPad}
+        }
+
+        tower.cashF = function() {
+            return tower.cash.toLocaleString('en-US');
         }
 
         res.render('index', tower);

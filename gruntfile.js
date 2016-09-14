@@ -16,7 +16,8 @@ module.exports = function(grunt) {
             collapseWhitespace: true
         },
         files: {
-            'dist/index.html': 'src/index.html'
+            'dist/index.html': 'src/index.html',
+            'dist/picker.html': 'src/picker.html'
         }
       }
     },
@@ -26,7 +27,8 @@ module.exports = function(grunt) {
                 compress: true
             },
             files: {
-                'dist/index.css':'src/index.less'
+                'dist/index.css':'src/index.less',
+                'dist/picker.css':'src/picker.less'
             }
         }
     },
@@ -37,14 +39,19 @@ module.exports = function(grunt) {
                 collapseWhitespace: true
             },
             files: {
-                'dist/index.css': 'dist/index.css'
+                'dist/index.css': 'dist/index.css',
+                'dist/picker.css': 'dist/picker.css'
             }
         }
     },
     inline: {
-        main: {
+        index: {
             src: 'dist/index.html',
             dest: 'dist/index.html'
+        },
+        picker: {
+            src: 'dist/picker.html',
+            dest: 'dist/picker.html'
         }
     },
     watch: {
@@ -73,7 +80,8 @@ module.exports = function(grunt) {
     rename: {
       main: {
         files: [
-          {src: 'dist/index.html', dest: 'dist/index.mustache'}
+          {src: 'dist/index.html', dest: 'dist/index.mustache'},
+          {src: 'dist/picker.html', dest: 'dist/picker.mustache'}
         ]
       }
     }

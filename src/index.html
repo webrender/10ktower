@@ -24,7 +24,7 @@ xhr.send();
     <span aria-hidden="true" class="lo"> | </span>
     <span>Daytime, D1/Q1/Y1</span>
     <span aria-hidden="true" class="lo"> | </span>
-    <span>$10,000</span>
+    <span>${{cashF}}</span>
     <span aria-hidden="true" class="lo"> |</span>
     <a href="">Next Turn (+12h)</a>
 </center>
@@ -45,7 +45,7 @@ xhr.send();
     <br class="lo">
     {{#staticFloors}}
         <span class="f {{floorClass}}">
-            <span aria-hidden="true" class="lo">|</span><a href="">{{floor}}</a>{{{qolHtml}}}{{{typeHtml}}}<span aria-hidden="true" class="lo">{{{floorPadding}}}|</span>
+            <span aria-hidden="true" class="lo">|</span><a href="/?f={{floor}}">{{floor_padded}}</a>{{{qolHtml}}}{{{typeHtml}}}<span aria-hidden="true" class="lo">{{{floorPadding}}}|</span>
         </span>
         <br class="lo">
     {{/staticFloors}}

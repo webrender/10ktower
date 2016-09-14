@@ -1,0 +1,178 @@
+* {
+    font-family: 'Monaco', 'Lucida Console', monospace;
+    font-size: 18px;
+    z-index:2;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+}
+body {
+    color: white;
+}
+tt {
+    color: fuchsia;
+}
+a {
+    color: inherit;
+}
+i {
+    font-style: normal;
+    color: blue;
+}
+b {
+    font-weight: normal;
+    color: #990000;
+}
+strong {
+    font-weight: normal;
+    color: red;
+}
+code {
+    color: teal;
+}
+hr {
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    margin: 0;
+}
+// Lynx-Only
+.lo {
+    display: none !important;
+}
+
+center {
+    display: flex;
+    justify-content: flex-end;
+}
+.sb {
+    justify-content: space-between;
+    background: black;
+    padding: 5px;
+    flex-wrap: wrap;
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+}
+center.centered {
+    justify-content: center;
+}
+.sb span, .sb a {
+    padding: 5px;
+}
+.f, .af, .bb {
+    border: 1px solid #222;
+    border-bottom: none;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    width: 300px;
+    max-width: 100%;
+    position: relative;
+    text-align: left;
+    cursor: pointer;
+}
+.f a {
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #333;
+    font-size: 24px;
+    padding: 0 5px;
+    min-width: 30px;
+    text-align: center;
+    text-decoration: none;
+    background: rgba(0,0,0,0.3);
+}
+.f:before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right:0;
+    left: 0;
+    z-index:-1;
+}
+// Hotel
+.f.-h {
+    background-color: #FFAAFF;
+}
+.f.-h:before {
+    background: url('i.svg') ~"176px -869px/100px auto" no-repeat;
+}
+// Housekeeping
+.f.-m {
+    background-color: #AAAAFF;
+}
+.f.-m:before {
+    background: url('i.svg') ~"184px -517px/100px auto" no-repeat;
+}
+// Security
+.f.-p {
+    background-color: #AAAAFF;
+}
+.f.-p:before {
+    background: url('i.svg') ~"184px -1027px/100px auto" no-repeat;
+}
+// Medical
+.f.-d {
+    background-color: #AAAAFF;
+}
+.f.-d:before {
+    background: url('i.svg') ~"184px -602px/100px auto" no-repeat;
+}
+// Restaurant
+.f.-r {
+    background-color: #FFAAAA;
+}
+.f.-r:before {
+    background: url('i.svg') ~"176px -691px/100px auto" no-repeat;
+}
+// Shop
+.f.-s {
+    background-color: #FFAAAA;
+}
+.f.-s:before {
+    background: url('i.svg') ~"176px -742px/100px auto" no-repeat;
+}
+// Theatre
+.f.-t {
+    background-color: #FFAAAA;
+}
+.f.-t:before {
+    background: url('i.svg') ~"176px -1246px/100px auto" no-repeat;
+}
+// Condo
+.f.-c {
+    background-color: #a27b7b;
+}
+.f.-c:before {
+    background: url('i.svg') ~"176px -944px/100px auto" no-repeat;
+}
+// Office
+.f.-o {
+    background-color: #AAFFFF;
+}
+.f.-o:before {
+    background: url('i.svg') ~"176px -1141px/100px auto" no-repeat;
+}
+// Empty
+.f.-e {
+    background-color: #333333;
+}
+.f.-e:before, {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+}
+// Lobby
+.f.-l {
+    background-color: #FFFFCC;
+}
+.f:before {
+    opacity: 0.3;
+    background-color: #FFFFFF !important;
+}
+.f:hover:before {
+    opacity: 0.8;
+    background-color: transparent !important;
+}
