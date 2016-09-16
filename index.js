@@ -95,61 +95,72 @@ var level = function(req, res) {
             var idx = req.query.f - 1;
             if (tower.floors[idx].type) {
                 //floor info
+                var floor = tower.floors[idx];
+                floor.level = req.query.f;
+                floor.cost = tower.floors[idx].type == 'Condo' &&
+                        tower.floors[idx].occupied == true ?
+                        true :
+                        false;
+                res.render('floor', floor);
             } else {
                 //empty floor
                 if (req.query.u) {
-                    // picker submission
-                    var type, cost;
-                    switch (req.query.u){
-                        case 'c':
-                            type = 'Condo';
-                            cost = 80000;
-                            break;
-                        case 'o':
-                            type = 'Office';
-                            cost = 40000;
-                            break;
-                        case 'h':
-                            type = 'Hotel';
-                            cost = 50000;
-                            break;
-                        case 'm':
-                            type = 'Housekeeping';
-                            cost = 50000;
-                            break;
-                        case 'p':
-                            type = 'Security';
-                            cost = 100000;
-                            break;
-                        case 'd':
-                            type = 'Medical';
-                            cost = 500000;
-                            break;
-                        case 'r':
-                            type = 'Restaurant';
-                            cost = 100000;
-                            break;
-                        case 's':
-                            type = 'Shop';
-                            cost = 100000;
-                            break;
-                        case 't':
-                            type = 'Theatre';
-                            cost = 500000;
-                            break;
-                    }
-                    tower.floors[idx] = {
-                        type: type,
-                        occupied: false
-                    }
-                    if (tower.cash >= cost) {
-                        tower.cash = tower.cash - cost;
-                        fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-                            res.redirect('/?l=' + req.query.f);
-                        });
+                    if (req.query.u == 'x') {
+                        // delete unit
                     } else {
-                        // need an error state
-                        res.redirect('/?l=' + req.query.f);
+                        // picker submission
+                        var type, cost;
+                        switch (req.query.u){
+                            case 'c':
+                                type = 'Condo';
+                                cost = 80000;
+                                break;
+                            case 'o':
+                                type = 'Office';
+                                cost = 40000;
+                                break;
+                            case 'h':
+                                type = 'Hotel';
+                                cost = 50000;
+                                break;
+                            case 'm':
+                                type = 'Housekeeping';
+                                cost = 50000;
+                                break;
+                            case 'p':
+                                type = 'Security';
+                                cost = 100000;
+                                break;
+                            case 'd':
+                                type = 'Medical';
+                                cost = 500000;
+                                break;
+                            case 'r':
+                                type = 'Restaurant';
+                                cost = 100000;
+                                break;
+                            case 's':
+                                type = 'Shop';
+                                cost = 100000;
+                                break;
+                            case 't':
+                                type = 'Theatre';
+                                cost = 500000;
+                                break;
+                        }
+                        tower.floors[idx] = {
+                            type: type,
+                            occupied: false
+                        }
+                        if (tower.cash >= cost) {
+                            tower.cash = tower.cash - cost;
+                            fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+                                res.redirect('/?l=' + req.query.f);
+                            });
+                        } else {
+                            // need an error state
+                            res.redirect('/?l=' + req.query.f);
+                        }
                     }
                 } else {
                     // picker
@@ -157,11 +168,6 @@ var level = function(req, res) {
                 }
             }
         }
-
-        // if floor doesnt exist, add floor
-        // if floor exists but unit is null, present unit selection dialog
-        // if floor exists, unit is null, 'u' parameter exists, create unit on floor (or delete unit)
-        // if floor & unit exist, present floor info
     });
 }
 
@@ -186,6 +192,113 @@ var index = function(req, res) {
         //tower floor calc
         var idx = l && tower.floors.length >= l ? l : tower.floors.length;
         var floor;
+
+        var pop = function(idx) {
+            if (idx){
+                switch(tower.floors[idx].type) {
+                    case 'Condo':
+                        if (tower.floors[idx].occupied) {
+                            return 3;
+                        } else {
+                            return 0;
+                        }
+                        break;
+                    case 'Office':
+                        if (!tower.floors[idx].occupied && tower.ticks % 0) {
+                            return 0;
+                        } else {
+                            return 6;
+                        }
+                        break;
+                    case 'Hotel':
+                        if (tower.ticks % 0) { // True = Nighttime
+                            switch(tower.floors[idx].qol){
+                                case 'good':
+                                    return 2;
+                                    break;
+                                case 'neutral':
+                                    return 1;
+                                    break;
+                                case 'bad':
+                                    return 0;
+                                    break;
+                            }
+                            return 0;
+                        } else {
+                            return 0;
+                        }
+                        break;
+                    case 'Restaurant':
+                        if (tower.ticks % 0) { // True = Nighttime
+                            return 0;
+                        } else {
+                            switch(tower.floors[idx].qol){
+                                case 'good':
+                                    return 50;
+                                    break;
+                                case 'neutral':
+                                    return 35;
+                                    break;
+                                case 'bad':
+                                    return 20;
+                                    break;
+                            }
+                            return 0;
+                        }
+                        break;
+                    case 'Shop':
+                        if (tower.ticks % 0) { // True = Nighttime
+                            return 0;
+                        } else {
+                            switch(tower.floors[idx].qol){
+                                case 'good':
+                                    return 50;
+                                    break;
+                                case 'neutral':
+                                    return 35;
+                                    break;
+                                case 'bad':
+                                    return 20;
+                                    break;
+                            }
+                            return 0;
+                        }
+                        break;
+                    case 'Theatre':
+                        if (tower.ticks % 0) { // True = Nighttime
+                            return 0;
+                        } else {
+                            switch(tower.floors[idx].qol){
+                                case 'good':
+                                    return 120;
+                                    break;
+                                case 'neutral':
+                                    return 75;
+                                    break;
+                                case 'bad':
+                                    return 10;
+                                    break;
+                            }
+                            return 0;
+                        }
+                        break;
+                    case 'Housekeeping':
+                    case 'Security':
+                    case 'Medical':
+                        return 0;
+                        break;
+                }
+            }
+            return false;
+        }
+
+        tower.population = function() {
+            var population = 0;
+            for (i=0; i<tower.floors.length; i++) {
+                population += pop(i);
+            }
+            return population;
+        }
 
         tower.floor = function() {
             floor = idx;

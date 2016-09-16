@@ -17,7 +17,8 @@ module.exports = function(grunt) {
         },
         files: {
             'dist/index.html': 'src/index.html',
-            'dist/picker.html': 'src/picker.html'
+            'dist/picker.html': 'src/picker.html',
+            'dist/floor.html': 'src/floor.html'
         }
       }
     },
@@ -28,7 +29,8 @@ module.exports = function(grunt) {
             },
             files: {
                 'dist/index.css':'src/index.less',
-                'dist/picker.css':'src/picker.less'
+                'dist/picker.css':'src/picker.less',
+                'dist/floor.css':'src/floor.less'
             }
         }
     },
@@ -40,7 +42,8 @@ module.exports = function(grunt) {
             },
             files: {
                 'dist/index.css': 'dist/index.css',
-                'dist/picker.css': 'dist/picker.css'
+                'dist/picker.css': 'dist/picker.css',
+                'dist/floor.css': 'dist/floor.css'
             }
         }
     },
@@ -52,6 +55,10 @@ module.exports = function(grunt) {
         picker: {
             src: 'dist/picker.html',
             dest: 'dist/picker.html'
+        },
+        floor: {
+            src: 'dist/floor.html',
+            dest: 'dist/floor.html'
         }
     },
     watch: {
@@ -81,7 +88,9 @@ module.exports = function(grunt) {
       main: {
         files: [
           {src: 'dist/index.html', dest: 'dist/index.mustache'},
-          {src: 'dist/picker.html', dest: 'dist/picker.mustache'}
+          {src: 'dist/picker.html', dest: 'dist/picker.mustache'},
+          {src: 'dist/floor.html', dest: 'dist/floor.mustache'}
+
         ]
       }
     }
