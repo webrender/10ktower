@@ -7,23 +7,42 @@
 <body>
 <center class="sb centered">
     <span>Floor {{level}}: {{type}}</span>
-<hr>
+<a href=""><hr></a>
 </center>
 <center class="centered">
 <span class="modal_body">
     <br class="lo">
+    {{#tenants}}
     <span class="f">
-        <span class="a">Status:</span> {{qol}}
+        <span class="a">Status:</span>
+        {{#occupied}}Occupied{{/occupied}}
+        {{^occupied}}Vacant{{/occupied}}
+    </span>
+    <br class="lo">
+    {{#qol}}
+    <span class="f">
+        <span class="a">Rating:</span> {{qol}}
     </span>
     <br class="lo">
     <span class="f">
-        <span class="a">Rating:</span>
+        <span class="a">Pop:</span> {{pop}}
     </span>
     <br class="lo">
     <span class="f">
-        <span class="a">Reasons:</span>
+        <span class="a">Revenue:</span>
+        {{#rev}}
+            {{#rev.single}}${{rev.amount}}-Once{{/rev.single}}
+            {{#rev.daily}}${{rev.amount}}/Day{{/rev.daily}}
+            {{#rev.quarter}}${{rev.amount}}/Qtr{{/rev.quarter}}
+        {{/rev}}
     </span>
     <br class="lo">
+    <span class="f">
+        <span class="a">Info:</span> {{qolCalc.reasons}}
+    </span>
+    <br class="lo">
+    {{/qol}}
+    {{/tenants}}
     <span class="f">
         <a href="" class="-d"><b>Delete Unit{{#cost}} ($80k){{/cost}}</b></a>
     </span>

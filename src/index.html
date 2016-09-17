@@ -16,6 +16,16 @@ xhr.onload = function() {
     }
 };
 xhr.send();
+window.onload = function() {
+    var floors = document.querySelectorAll(".f");
+    for (var i = 0; i < floors.length; i++) {
+        floors[i].onclick = function() {
+            window.location = this.querySelectorAll("a")[0].href;
+            return false;
+        };
+    }
+};
+
 </script>
 </head>
 <body>
@@ -29,7 +39,7 @@ xhr.send();
     <a href="">Next Turn (+12h)</a>
 </center>
 <hr>
-<center class="t">
+<center class="t" id="t">
     <span aria-hidden="true" class="lo">_____________________</span>
     <br class="lo">
     {{#floorUp}}

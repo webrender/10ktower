@@ -13,7 +13,211 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views','./dist');
 
+//   /$$   /$$           /$$
+//  | $$  | $$          | $$
+//  | $$  | $$  /$$$$$$ | $$  /$$$$$$   /$$$$$$   /$$$$$$   /$$$$$$$
+//  | $$$$$$$$ /$$__  $$| $$ /$$__  $$ /$$__  $$ /$$__  $$ /$$_____/
+//  | $$__  $$| $$$$$$$$| $$| $$  \ $$| $$$$$$$$| $$  \__/|  $$$$$$
+//  | $$  | $$| $$_____/| $$| $$  | $$| $$_____/| $$       \____  $$
+//  | $$  | $$|  $$$$$$$| $$| $$$$$$$/|  $$$$$$$| $$       /$$$$$$$/
+//  |__/  |__/ \_______/|__/| $$____/  \_______/|__/      |_______/
+//                          | $$
+//                          | $$
+//                          |__/
 
+// Derive time periods from ticks
+var t_daytime = function(tower){return tower.ticks % 2 == 0};
+var t_nighttime = function(tower){return tower.ticks % 2 > 0};
+var t_quarter = function(tower){return tower.ticks % 90 == 0};
+var t_year = function(tower){return tower.ticks % 360 == 0};
+
+// Population Model
+var pop = function(idx) {
+    if (idx){
+        switch(tower.floors[idx].type) {
+            case 'Condo':
+                if (tower.floors[idx].tenants.occupied) {
+                    return 3;
+                } else {
+                    return 0;
+                }
+                break;
+            case 'Office':
+                if (!tower.floors[idx].tenants.occupied && tower.ticks % 0) {
+                    return 0;
+                } else {
+                    return 6;
+                }
+                break;
+            case 'Hotel':
+                if (t_nighttime(tower)) {
+                    switch(tower.floors[idx].tenants.qol){
+                        case 'Good':
+                            return 2;
+                            break;
+                        case 'Neutral':
+                            return 1;
+                            break;
+                        case 'Bad':
+                            return 0;
+                            break;
+                    }
+                    return 0;
+                } else {
+                    return 0;
+                }
+                break;
+            case 'Restaurant':
+                if (t_nighttime(tower)) {
+                    return 0;
+                } else {
+                    switch(tower.floors[idx].tenants.qol){
+                        case 'Good':
+                            return 50;
+                            break;
+                        case 'Neutral':
+                            return 35;
+                            break;
+                        case 'Bad':
+                            return 20;
+                            break;
+                    }
+                    return 0;
+                }
+                break;
+            case 'Shop':
+                if (t_nighttime(tower)) {
+                    return 0;
+                } else {
+                    switch(tower.floors[idx].tenants.qol){
+                        case 'Good':
+                            return 50;
+                            break;
+                        case 'Neutral':
+                            return 35;
+                            break;
+                        case 'Bad':
+                            return 20;
+                            break;
+                    }
+                    return 0;
+                }
+                break;
+            case 'Theatre':
+                if (t_nighttime(tower)) {
+                    return 0;
+                } else {
+                    switch(tower.floors[idx].tenants.qol){
+                        case 'Good':
+                            return 120;
+                            break;
+                        case 'Neutral':
+                            return 75;
+                            break;
+                        case 'Bad':
+                            return 10;
+                            break;
+                    }
+                    return 0;
+                }
+                break;
+            case 'Housekeeping':
+            case 'Security':
+            case 'Medical':
+                return 0;
+                break;
+        }
+    }
+    return false;
+}
+
+// Revenue Model
+var rev = function(idx) {
+    if (idx){
+        switch(tower.floors[idx].type) {
+            case 'Condo':
+                if (tower.floors[idx].tenants.occupied) {
+                    return {'single':true, amount:100000};
+                } else {
+                    return 0;
+                }
+                break;
+            case 'Office':
+                if (tower.floors[idx].tenants.occupied) {
+                    return {'single':true, amount:10000};
+                } else {
+                    return 0;
+                }
+                break;
+            case 'Hotel':
+                if (tower.floors[idx].tenants.occupied) {
+                    switch(tower.floors[idx].tenants.qol){
+                        case 'Good':
+                            return {'daily':true, amount:3000};
+                            break;
+                        case 'Neutral':
+                            return {'daily':true, amount: 2000};
+                            break;
+                        case 'Bad':
+                            return {'daily':true, amount: 800};
+                            break;
+                    }
+                }
+                return {'daily':true, amount: 0};
+                break;
+            case 'Restaurant':
+                switch(tower.floors[idx].tenants.qol){
+                    case 'Good':
+                        return {'daily':true, amount: 10000};
+                        break;
+                    case 'Neutral':
+                        return {'daily':true, amount: 4000};
+                        break;
+                    case 'Bad':
+                        return {'daily':true, amount: -2000};
+                        break;
+                }
+                return 0;
+                break;
+            case 'Shop':
+                switch(tower.floors[idx].tenants.qol){
+                    case 'Good':
+                        return {'daily':true, amount: 20000};
+                        break;
+                    case 'Neutral':
+                        return {'daily':true, amount: 10000};
+                        break;
+                    case 'Bad':
+                        return {'daily':true, amount: -4000};
+                        break;
+                }
+                return 0;
+                break;
+            case 'Theatre':
+                switch(tower.floors[idx].tenants.qol){
+                    case 'Good':
+                        return {'daily':true, amount: 40000};
+                        break;
+                    case 'Neutral':
+                        return {'daily':true, amount: 10000};
+                        break;
+                    case 'Bad':
+                        return {'daily':true, amount: 0};
+                        break;
+                }
+                return 0;
+                break;
+            case 'Housekeeping':
+                return {'quarter':true, amount: 10000};
+                break;
+            case 'Security':
+            case 'Medical':
+                return {'quarter':true, amount: 20000};
+                break;
+        }
+    }
+    return false;
+}
 //  /$$$$$$$                        /$$     /$$
 // | $$__  $$                      | $$    |__/
 // | $$  \ $$  /$$$$$$  /$$   /$$ /$$$$$$   /$$ /$$$$$$$   /$$$$$$
@@ -97,6 +301,9 @@ var level = function(req, res) {
                 //floor info
                 var floor = tower.floors[idx];
                 floor.level = req.query.f;
+                floor.pop = pop(idx);
+                floor.rev = rev(idx);
+                //cost - occupied condos must be bought back from owners
                 floor.cost = tower.floors[idx].type == 'Condo' &&
                         tower.floors[idx].occupied == true ?
                         true :
@@ -109,18 +316,21 @@ var level = function(req, res) {
                         // delete unit
                     } else {
                         // picker submission
-                        var type, cost;
+                        var type, cost, tenants;
                         switch (req.query.u){
                             case 'c':
                                 type = 'Condo';
+                                tenants = true;
                                 cost = 80000;
                                 break;
                             case 'o':
                                 type = 'Office';
+                                tenants = true;
                                 cost = 40000;
                                 break;
                             case 'h':
                                 type = 'Hotel';
+                                tenants = true;
                                 cost = 50000;
                                 break;
                             case 'm':
@@ -137,20 +347,25 @@ var level = function(req, res) {
                                 break;
                             case 'r':
                                 type = 'Restaurant';
+                                tenants = true;
                                 cost = 100000;
                                 break;
                             case 's':
                                 type = 'Shop';
+                                tenants = true;
                                 cost = 100000;
                                 break;
                             case 't':
                                 type = 'Theatre';
+                                tenants = true;
                                 cost = 500000;
                                 break;
                         }
                         tower.floors[idx] = {
-                            type: type,
-                            occupied: false
+                            type: type
+                        }
+                        if (tenants) {
+                            tower.floors[idx].tenants = {occupied: false};
                         }
                         if (tower.cash >= cost) {
                             tower.cash = tower.cash - cost;
@@ -192,105 +407,6 @@ var index = function(req, res) {
         //tower floor calc
         var idx = l && tower.floors.length >= l ? l : tower.floors.length;
         var floor;
-
-        var pop = function(idx) {
-            if (idx){
-                switch(tower.floors[idx].type) {
-                    case 'Condo':
-                        if (tower.floors[idx].occupied) {
-                            return 3;
-                        } else {
-                            return 0;
-                        }
-                        break;
-                    case 'Office':
-                        if (!tower.floors[idx].occupied && tower.ticks % 0) {
-                            return 0;
-                        } else {
-                            return 6;
-                        }
-                        break;
-                    case 'Hotel':
-                        if (tower.ticks % 0) { // True = Nighttime
-                            switch(tower.floors[idx].qol){
-                                case 'good':
-                                    return 2;
-                                    break;
-                                case 'neutral':
-                                    return 1;
-                                    break;
-                                case 'bad':
-                                    return 0;
-                                    break;
-                            }
-                            return 0;
-                        } else {
-                            return 0;
-                        }
-                        break;
-                    case 'Restaurant':
-                        if (tower.ticks % 0) { // True = Nighttime
-                            return 0;
-                        } else {
-                            switch(tower.floors[idx].qol){
-                                case 'good':
-                                    return 50;
-                                    break;
-                                case 'neutral':
-                                    return 35;
-                                    break;
-                                case 'bad':
-                                    return 20;
-                                    break;
-                            }
-                            return 0;
-                        }
-                        break;
-                    case 'Shop':
-                        if (tower.ticks % 0) { // True = Nighttime
-                            return 0;
-                        } else {
-                            switch(tower.floors[idx].qol){
-                                case 'good':
-                                    return 50;
-                                    break;
-                                case 'neutral':
-                                    return 35;
-                                    break;
-                                case 'bad':
-                                    return 20;
-                                    break;
-                            }
-                            return 0;
-                        }
-                        break;
-                    case 'Theatre':
-                        if (tower.ticks % 0) { // True = Nighttime
-                            return 0;
-                        } else {
-                            switch(tower.floors[idx].qol){
-                                case 'good':
-                                    return 120;
-                                    break;
-                                case 'neutral':
-                                    return 75;
-                                    break;
-                                case 'bad':
-                                    return 10;
-                                    break;
-                            }
-                            return 0;
-                        }
-                        break;
-                    case 'Housekeeping':
-                    case 'Security':
-                    case 'Medical':
-                        return 0;
-                        break;
-                }
-            }
-            return false;
-        }
 
         tower.population = function() {
             var population = 0;
@@ -337,26 +453,38 @@ var index = function(req, res) {
                 case 'Housekeeping':
                     ret = '-m';
                     break;
+                case 'Medical':
+                    ret = '-d';
+                    break;
+                case 'Security':
+                    ret = '-p';
+                    break;
                 case 'Restaurant':
                     ret = '-r';
                     break;
+                case 'Shop':
+                    ret = '-s';
+                    break;
+                case 'Theatre':
+                    ret = '-t';
+                    break;
             }
-            if (this.occupied === false || !this.type ) {
+            if (this.tenants && this.tenants.occupied === false || !this.type ) {
                 ret += ' -e';
             }
             return ret;
         }
 
         tower.qolHtml = function() {
-            if (this.qol) {
-                switch (this.qol) {
-                    case 'good':
+            if (this.tenants && this.tenants.qol) {
+                switch (this.tenants.qol) {
+                    case 'Good':
                         return '<img src="i.svg" class="h" alt=":)">';
                         break;
-                    case 'bad':
+                    case 'Bad':
                         return '<img src="i.svg" class="s" alt=":(">';
                         break;
-                    case 'neutral':
+                    case 'Neutral':
                         return '<img src="i.svg" class="n" alt=":|">';
                         break;
                 }
@@ -366,7 +494,7 @@ var index = function(req, res) {
         }
 
         tower.typeHtml = function() {
-            if (this.occupied === false) {
+            if (this.tenants && this.tenants.occupied === false) {
                 return this.type;
             } else {
                 switch (this.type) {
