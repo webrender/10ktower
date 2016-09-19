@@ -22,6 +22,13 @@ module.exports = function(grunt) {
         }
       }
     },
+    uglify: {
+      base: {
+        files: {
+          'dist/base.js': ['src/base.js']
+        }
+      }
+    },
     less: {
         main: {
             options: {
@@ -64,7 +71,7 @@ module.exports = function(grunt) {
     watch: {
       client: {
         files: ['src/*.*'],
-        tasks: ['copy', 'htmlmin', 'less', 'inline', 'rename', 'express:main'],
+        tasks: ['copy', 'htmlmin', 'uglify', 'less', 'inline', 'rename', 'express:main'],
         options: {
           spawn: false
         }
@@ -96,15 +103,16 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-rename');
-  grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
-  grunt.loadNpmTasks('grunt-inline');
+  grunt.loadNpmTasks('grunt-contrib-htmlmin');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-rename');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-express-server');
+  grunt.loadNpmTasks('grunt-inline');
 
-  grunt.registerTask('server', ['copy', 'htmlmin', 'less', 'inline', 'rename', 'express', 'watch']);
+  grunt.registerTask('server', ['copy', 'htmlmin', 'uglify', 'less', 'inline', 'rename', 'express', 'watch']);
 
 };

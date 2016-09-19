@@ -3,6 +3,18 @@ var compression = require('compression');
 var mustacheExpress = require('mustache-express');
 var fs = require('fs');
 
+//  /$$$$$$$                        /$$     /$$
+// | $$__  $$                      | $$    |__/
+// | $$  \ $$  /$$$$$$  /$$   /$$ /$$$$$$   /$$ /$$$$$$$   /$$$$$$
+// | $$$$$$$/ /$$__  $$| $$  | $$|_  $$_/  | $$| $$__  $$ /$$__  $$
+// | $$__  $$| $$  \ $$| $$  | $$  | $$    | $$| $$  \ $$| $$  \ $$
+// | $$  \ $$| $$  | $$| $$  | $$  | $$ /$$| $$| $$  | $$| $$  | $$
+// | $$  | $$|  $$$$$$/|  $$$$$$/  |  $$$$/| $$| $$  | $$|  $$$$$$$
+// |__/  |__/ \______/  \______/    \___/  |__/|__/  |__/ \____  $$
+//                                                        /$$  \ $$
+//                                                       |  $$$$$$/
+//                                                        \______/
+
 var app = express();
 
 app.use(compression());
@@ -12,6 +24,23 @@ app.engine('mustache', mustacheExpress());
 
 app.set('view engine', 'mustache');
 app.set('views','./dist');
+
+app.get('/', function (req, res) {
+    if (req.query.f) {
+        // level` page
+        level(req,res);
+    } else if (req.query.t) {
+        // tick handler
+        tick(req,res);
+    } else {
+        // static page
+        index(req,res);
+    }
+});
+
+app.listen(3000, function () {
+    console.log('10ktower listening on port 3000!');
+});
 
 //   /$$   /$$           /$$
 //  | $$  | $$          | $$
@@ -30,6 +59,18 @@ var t_daytime = function(tower){return tower.ticks % 2 == 0};
 var t_nighttime = function(tower){return tower.ticks % 2 > 0};
 var t_quarter = function(tower){return tower.ticks % 90 == 0};
 var t_year = function(tower){return tower.ticks % 360 == 0};
+
+//   /$$$$$$$
+//  | $$__  $$
+//  | $$  \ $$  /$$$$$$   /$$$$$$
+//  | $$$$$$$/ /$$__  $$ /$$__  $$
+//  | $$____/ | $$  \ $$| $$  \ $$
+//  | $$      | $$  | $$| $$  | $$
+//  | $$      |  $$$$$$/| $$$$$$$/
+//  |__/       \______/ | $$____/
+//                      | $$
+//                      | $$
+//                      |__/
 
 // Population Model
 var pop = function(idx) {
@@ -131,6 +172,16 @@ var pop = function(idx) {
     return false;
 }
 
+//   /$$$$$$$
+//  | $$__  $$
+//  | $$  \ $$  /$$$$$$  /$$    /$$
+//  | $$$$$$$/ /$$__  $$|  $$  /$$/
+//  | $$__  $$| $$$$$$$$ \  $$/$$/
+//  | $$  \ $$| $$_____/  \  $$$/
+//  | $$  | $$|  $$$$$$$   \  $/
+//  |__/  |__/ \_______/    \_/
+//
+
 // Revenue Model
 var rev = function(idx) {
     if (idx){
@@ -144,7 +195,7 @@ var rev = function(idx) {
                 break;
             case 'Office':
                 if (tower.floors[idx].tenants.occupied) {
-                    return {'single':true, amount:10000};
+                    return {'quarter':true, amount:10000};
                 } else {
                     return 0;
                 }
@@ -218,34 +269,6 @@ var rev = function(idx) {
     }
     return false;
 }
-//  /$$$$$$$                        /$$     /$$
-// | $$__  $$                      | $$    |__/
-// | $$  \ $$  /$$$$$$  /$$   /$$ /$$$$$$   /$$ /$$$$$$$   /$$$$$$
-// | $$$$$$$/ /$$__  $$| $$  | $$|_  $$_/  | $$| $$__  $$ /$$__  $$
-// | $$__  $$| $$  \ $$| $$  | $$  | $$    | $$| $$  \ $$| $$  \ $$
-// | $$  \ $$| $$  | $$| $$  | $$  | $$ /$$| $$| $$  | $$| $$  | $$
-// | $$  | $$|  $$$$$$/|  $$$$$$/  |  $$$$/| $$| $$  | $$|  $$$$$$$
-// |__/  |__/ \______/  \______/    \___/  |__/|__/  |__/ \____  $$
-//                                                        /$$  \ $$
-//                                                       |  $$$$$$/
-//                                                        \______/
-
-app.get('/', function (req, res) {
-    if (req.query.f) {
-        // level` page
-        level(req,res);
-    } else if (req.query.t) {
-        // tick handler
-        tick(req,res);
-    } else {
-        // static page
-        index(req,res);
-    }
-});
-
-app.listen(3000, function () {
-    console.log('Example app listening on port 3000!');
-});
 
 //  /$$$$$$$$ /$$           /$$
 // |__  $$__/|__/          | $$
@@ -258,16 +281,77 @@ app.listen(3000, function () {
 
 var tick = function(req, res) {
     // tick eval goes here
-    if (req.xhr) {
-        // ajax request, return HTML blocks
-        res.send(fs.readFileSync('tower.json', 'utf8'));
-    } else {
-        // http request, redirect to static index
-        var path = '/';
-        if (req.query.l)
-            path = '/?l=' + req.query.l;
-        res.redirect(path);
-    }
+    // - first do a QoL check on all the floors
+    // - write the QoL output & comments to JSON
+    // - based on QoL, move tehants in/out
+    // - if its the end of the day/quarter assess rent/income
+    // - either redirect to the index, or return JSON if it's an XHR
+    fs.readFile('tower.json', 'utf8', function(err, data) {
+        var tower = JSON.parse(data);
+        // lets count all our floors for calcs in the next loop
+        var floorCount = {};
+        for (i=0; i<tower.floors.length; i++) {
+            if (!floorCount[tower.floors[i].type])
+                floorCount[tower.floors[i].type] = 0;
+            floorCount[tower.floors[i].type]++;
+        }
+        // console.log(floorCount);
+        // loop through the floors and do QoL calcs, move tenants in/out
+        // based on QoL
+        for (i=0; i<tower.floors.length; i++) {
+            switch(tower.floors[i].type) {
+                case 'Condo':
+                    // needs enough offices
+                    // needs no commercial within 1 floor
+                    // needs high enough res/com ratio
+                    // needs high enough police ratio
+                    // needs high enough medical ratio
+                    break;
+                case 'Office':
+                    // needs enough condos
+                    // needs no commercial within 1 floors
+                    // needs high enough com/res ratio
+                    // needs high enough police ratio
+                    // needs restaurant ratio
+                    break;
+                case 'Hotel':
+                    // needs enough housekeeping
+                    // needs enough commerical properties
+                    break;
+                case 'Restaurant':
+                    // needs enough res/com/hotel
+                    // needs high enough police ratio
+                    break;
+                case 'Shop':
+                    // needs enough res/com/hotel
+                    // needs high enough police ratio
+                    break;
+                case 'Theatre':
+                    // needs minimum population
+                    // needs enough res/com/hotel
+                    // needs high enough police ratio
+                    break;
+                case 'Housekeeping':
+                case 'Medical':
+                case 'Security':
+                    return false;
+                    break;
+            }
+        }
+        // calculate rents based on the updated tower
+        // move time forward
+        // write the tower back to json
+        if (req.xhr) {
+            // ajax request, return HTML blocks
+            res.send(fs.readFileSync('tower.json', 'utf8'));
+        } else {
+            // http request, redirect to static index
+            var path = '/';
+            if (req.query.l)
+                path = '/?l=' + req.query.l;
+            res.redirect(path);
+        }
+    });
 }
 
 //  /$$                                     /$$
@@ -298,84 +382,100 @@ var level = function(req, res) {
         } else {
             var idx = req.query.f - 1;
             if (tower.floors[idx].type) {
-                //floor info
-                var floor = tower.floors[idx];
-                floor.level = req.query.f;
-                floor.pop = pop(idx);
-                floor.rev = rev(idx);
-                //cost - occupied condos must be bought back from owners
-                floor.cost = tower.floors[idx].type == 'Condo' &&
-                        tower.floors[idx].occupied == true ?
-                        true :
-                        false;
-                res.render('floor', floor);
-            } else {
-                //empty floor
-                if (req.query.u) {
-                    if (req.query.u == 'x') {
-                        // delete unit
-                    } else {
-                        // picker submission
-                        var type, cost, tenants;
-                        switch (req.query.u){
-                            case 'c':
-                                type = 'Condo';
-                                tenants = true;
-                                cost = 80000;
-                                break;
-                            case 'o':
-                                type = 'Office';
-                                tenants = true;
-                                cost = 40000;
-                                break;
-                            case 'h':
-                                type = 'Hotel';
-                                tenants = true;
-                                cost = 50000;
-                                break;
-                            case 'm':
-                                type = 'Housekeeping';
-                                cost = 50000;
-                                break;
-                            case 'p':
-                                type = 'Security';
-                                cost = 100000;
-                                break;
-                            case 'd':
-                                type = 'Medical';
-                                cost = 500000;
-                                break;
-                            case 'r':
-                                type = 'Restaurant';
-                                tenants = true;
-                                cost = 100000;
-                                break;
-                            case 's':
-                                type = 'Shop';
-                                tenants = true;
-                                cost = 100000;
-                                break;
-                            case 't':
-                                type = 'Theatre';
-                                tenants = true;
-                                cost = 500000;
-                                break;
-                        }
-                        tower.floors[idx] = {
-                            type: type
-                        }
-                        if (tenants) {
-                            tower.floors[idx].tenants = {occupied: false};
-                        }
-                        if (tower.cash >= cost) {
-                            tower.cash = tower.cash - cost;
+                if (req.query.u == 'x') {
+                    // delete unit
+                    if (tower.floors[idx].type == 'Condo' && tower.floors[idx].tenants.occupied == true) {
+                        if (tower.cash > 80000) {
+                            tower.cash = tower.cash - 80000;
+                            tower.floors[idx] = {};
                             fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
                                 res.redirect('/?l=' + req.query.f);
                             });
                         } else {
-                            // need an error state
-                            res.redirect('/?l=' + req.query.f);
+                            //error state here when we dont have cash to delete
                         }
+                    } else {
+                        tower.floors[idx] = {};
+                        fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+                            res.redirect('/?l=' + req.query.f);
+                        });
+                    }
+                } else {
+                    //floor info
+                    var floor = tower.floors[idx];
+                    floor.level = req.query.f;
+                    floor.pop = pop(idx);
+                    floor.rev = rev(idx);
+                    //cost - occupied condos must be bought back from owners
+                    floor.cost = tower.floors[idx].type == 'Condo' &&
+                            tower.floors[idx].tenants.occupied == true ?
+                            true :
+                            false;
+                    res.render('floor', floor);
+                }
+            } else {
+                //empty floor
+                if (req.query.u) {
+                    // picker submission
+                    var type, cost, tenants;
+                    switch (req.query.u){
+                        case 'c':
+                            type = 'Condo';
+                            tenants = true;
+                            cost = 80000;
+                            break;
+                        case 'o':
+                            type = 'Office';
+                            tenants = true;
+                            cost = 40000;
+                            break;
+                        case 'h':
+                            type = 'Hotel';
+                            tenants = true;
+                            cost = 50000;
+                            break;
+                        case 'm':
+                            type = 'Housekeeping';
+                            cost = 50000;
+                            break;
+                        case 'p':
+                            type = 'Security';
+                            cost = 100000;
+                            break;
+                        case 'd':
+                            type = 'Medical';
+                            cost = 500000;
+                            break;
+                        case 'r':
+                            type = 'Restaurant';
+                            tenants = true;
+                            cost = 100000;
+                            break;
+                        case 's':
+                            type = 'Shop';
+                            tenants = true;
+                            cost = 100000;
+                            break;
+                        case 't':
+                            type = 'Theatre';
+                            tenants = true;
+                            cost = 500000;
+                            break;
+                    }
+                    tower.floors[idx] = {
+                        type: type
+                    }
+                    if (tenants) {
+                        tower.floors[idx].tenants = {occupied: false};
+                    }
+                    if (tower.cash >= cost) {
+                        tower.cash = tower.cash - cost;
+                        fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+                            res.redirect('/?l=' + req.query.f);
+                        });
+                    } else {
+                        // need an error state
+                        res.redirect('/?l=' + req.query.f);
                     }
                 } else {
                     // picker
