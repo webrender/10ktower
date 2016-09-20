@@ -289,7 +289,7 @@ var tick = function(req, res) {
 				fc[tower.floors[i].type] = 0;
 			fc[tower.floors[i].type]++;
 		}
-		console.log(fc);
+		// console.log(fc);
 		// loop through the floors and do QoL calcs, move tenants in/out
 		// based on QoL
 		for (i=0; i<tower.floors.length; i++) {
@@ -309,7 +309,6 @@ var tick = function(req, res) {
 					}
 					// needs no commercial within 1 floor
 					var c = com(tower, i);
-					console.log(i, c);
 					if (c) {
 						qolScore += c;
 						qolComments.push('It\'s too noisy.');
