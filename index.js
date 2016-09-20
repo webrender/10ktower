@@ -58,28 +58,32 @@ app.listen(3000, function () {
 var t_daytime = function(tower){return tower.ticks % 2 == 0;};
 var t_nighttime = function(tower){return tower.ticks % 2 > 0;};
 var t_quarter = function(tower){return tower.ticks % 90 == 0;};
-var t_year = function(tower){return tower.ticks % 360 == 0;};
+// var t_year = function(tower){return tower.ticks % 360 == 0;};
 
 var com = function(tower, i) {
 	var total = 0;
-	if (tower.floors[i+1] == 'Restaurant' ||
-		tower.floors[i+1] == 'Shop' ||
-		tower.floors[i+1] == 'Theatre'
-	) {
-		total += 3;
+	if (tower.floors[i+1]) {
+		if (tower.floors[i+1].type == 'Restaurant' ||
+			tower.floors[i+1].type == 'Shop' ||
+			tower.floors[i+1].type == 'Theatre'
+		) {
+			total -= 3;
+		}
 	}
-	if (tower.floors[i-1] == 'Restaurant' ||
-		tower.floors[i-1] == 'Shop' ||
-		tower.floors[i-1] == 'Theatre'
-	) {
-		total += 3;
+	if (tower.floors[i-1]) {
+		if (tower.floors[i-1].type == 'Restaurant' ||
+			tower.floors[i-1].type == 'Shop' ||
+			tower.floors[i-1].type == 'Theatre'
+		) {
+			total -= 3;
+		}
 	}
 	return total;
 };
 
-var r80 = function() {
-	return Math.ceil(Math.random() * 100) > 80 ? false : true;
-};
+var r75 = function() { return Math.ceil(Math.random() * 100) < 75 ? true : false; };
+// var r50 = function() { return Math.ceil(Math.random() * 100) < 50 ? true : false; };
+// var r25 = function() { return Math.ceil(Math.random() * 100) < 25 ? true : false; };
 
 //   /$$$$$$$
 //  | $$__  $$
@@ -104,7 +108,7 @@ var pop = function(tower, idx) {
 				return 0;
 			}
 		case 'Office':
-			if (!tower.floors[idx].tenants.occupied && tower.ticks % 0) {
+			if (!tower.floors[idx].tenants.occupied && t_nighttime) {
 				return 0;
 			} else {
 				return 6;
@@ -247,14 +251,14 @@ var rev = function(tower, idx) {
 			case 'Neutral':
 				return {'daily':true, amount: 10000};
 			case 'Bad':
-				return {'daily':true, amount: 0};
+				return {'daily':true, amount: -8000};
 			}
 			return 0;
 		case 'Housekeeping':
-			return {'quarter':true, amount: 10000};
+			return {'quarter':true, amount: -10000};
 		case 'Security':
 		case 'Medical':
-			return {'quarter':true, amount: 20000};
+			return {'quarter':true, amount: -20000};
 		}
 	}
 	return false;
@@ -285,198 +289,264 @@ var tick = function(req, res) {
 				fc[tower.floors[i].type] = 0;
 			fc[tower.floors[i].type]++;
 		}
-		// console.log(fc);
+		console.log(fc);
 		// loop through the floors and do QoL calcs, move tenants in/out
 		// based on QoL
-		var qolScore = 0;
-		var qolComments = [];
 		for (i=0; i<tower.floors.length; i++) {
-			switch(tower.floors[i].type) {
-			case 'Condo':
-				// needs enough offices
-				if (fc.Condo / fc.Office > 1.5) {
-					qolScore--;
-					qolComments.push('There aren\'t enough jobs.');
+			if (tower.floors[i].tenants){
+				var qolScore = 0;
+				var qolComments = [];
+				switch(tower.floors[i].type) {
+				case 'Condo':
+					// needs enough offices
+					if (fc.Condo / fc.Office > 1.5) {
+						qolScore--;
+						qolComments.push('There aren\'t enough jobs.');
+					}
+					if (fc.Condo / fc.Office < 0.5) {
+						qolScore++;
+						qolComments.push('Plenty of jobs!');
+					}
+					// needs no commercial within 1 floor
+					var c = com(tower, i);
+					console.log(i, c);
+					if (c) {
+						qolScore += c;
+						qolComments.push('It\'s too noisy.');
+					}
+					// needs high enough res/com ratio
+					if ((fc.Condo + fc.hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) > 6) {
+						qolScore--;
+						qolComments.push('There\'s nothing to do!');
+					}
+					if ((fc.Condo + fc.Hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) < 3) {
+						qolScore++;
+						qolComments.push('There\'s lots of activities!');
+					}
+					// needs high enough police ratio
+					if (tower.floors.count / fc.Security > 50) {
+						qolScore--;
+						qolComments.push('It\'s not safe in this building.');
+					}
+					if (tower.floors.count / fc.Security < 20) {
+						qolScore++;
+						qolComments.push('I feel safe in my home.');
+					}
+					// needs high enough medical ratio
+					if (tower.floors.count / fc.Medical > 100) {
+						qolScore -= 3;
+						qolComments.push('It takes too long to see a doctor.');
+					}
+					if (tower.floors.count / fc.Medical < 40) {
+						qolScore++;
+						qolComments.push('This building has excellent medical care.');
+					}
+					break;
+				case 'Office':
+					// needs enough condos
+					if (fc.Office / fc.Condo > 1.5 && r75()) {
+						qolScore--;
+						qolComments.push('There aren\'t enough workers.');
+					}
+					if (fc.Office / fc.Condo < 0.5) {
+						qolScore++;
+						qolComments.push('Plenty of talent!');
+					}
+					// needs high enough restaurant ratio
+					if (fc.Office / fc.Restaurant > 5 && r75()) {
+						qolScore -= 3;
+						qolComments.push ('There\s nowhere to eat lunch!');
+					}
+					if (fc.Office / fc.Restaurant < 3) {
+						qolScore++;
+						qolComments.push ('There\s plenty of food places around here.');
+					}
+					// needs high enough police ratio
+					if (tower.floors.count / fc.Security > 50) {
+						qolScore -= 3;
+						qolComments.push('It\'s not safe in this building.');
+					}
+					if (tower.floors.count / fc.Security < 20) {
+						qolScore++;
+						qolComments.push('I feel safe here.');
+					}
+					break;
+				case 'Hotel':
+					// needs enough housekeeping
+					if (fc.Hotel / fc.Housekeeping > 10 && r75()) {
+						qolScore -= 3;
+						qolComments.push('These rooms are filthy!');
+					}
+					if (fc.hotel / fc.Housekeeping < 6) {
+						qolScore ++;
+						qolComments.push('Clean rooms!');
+					}
+					// needs no commercial within 1 floor
+					c = com(tower, i);
+					if (c) {
+						qolScore += c;
+						qolComments.push('It\'s too noisy.');
+					}
+					// needs enough commerical properties
+					if (tower.floors.count / (fc.Restaurant + fc.Shop + fc.Theatre) > 3  && r75()) {
+						qolScore--;
+						qolComments.push('There\'s not enough to do in this Tower.');
+					}
+					if (tower.floors.count / (fc.Restaurant + fc.Shop + fc.Theatre) < 2.5) {
+						qolScore++;
+						qolComments.push('Lots to do here!');
+					}
+					break;
+				case 'Restaurant':
+					// needs enough res/com/hotel
+					if ((fc.Condo + fc.Hotel + fc.Office) / fc.Restaurant < 2 && r75()) {
+						qolScore--;
+						qolComments.push('Not enough patrons.');
+					}
+					if((fc.Condo + fc.Hotel + fc.Office) / fc.Restaurant > 6) {
+						qolScore++;
+						qolComments.push('Plenty of business!');
+					}
+					// needs high enough police ratio
+					if (tower.floors.count / fc.Security > 50) {
+						qolScore -= 3;
+						qolComments.push('It\'s not safe in this building.');
+					}
+					if (tower.floors.count / fc.Security < 20) {
+						qolScore++;
+						qolComments.push('I feel safe here.');
+					}
+					break;
+				case 'Shop':
+					// needs enough res/com/hotel
+					if ((fc.Condo + fc.Hotel + fc.Office) / fc.Shop < 8 && r75()) {
+						qolScore--;
+						qolComments.push('Not enough patrons.');
+					}
+					if((fc.Condo + fc.Hotel + fc.Office) / fc.Shop > 12) {
+						qolScore++;
+						qolComments.push('Plenty of business!');
+					}
+					// needs high enough police ratio
+					if (tower.floors.count / fc.Security > 50) {
+						qolScore -= 3;
+						qolComments.push('It\'s not safe in this building.');
+					}
+					if (tower.floors.count / fc.Security < 20) {
+						qolScore++;
+						qolComments.push('I feel safe here.');
+					}
+					break;
+				case 'Theatre':
+					// needs minimum population
+					// needs enough res/com/hotel
+					if ((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre < 8 || population(tower) < 1000) {
+						qolScore--;
+						qolComments.push('Not enough patrons.');
+					}
+					if((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre > 12) {
+						qolScore++;
+						qolComments.push('Plenty of business!');
+					}
+					// needs high enough police ratio
+					if (tower.floors.count / fc.Security > 50) {
+						qolScore -= 3;
+						qolComments.push('It\'s not safe in this building.');
+					}
+					if (tower.floors.count / fc.Security < 20) {
+						qolScore++;
+						qolComments.push('I feel safe here.');
+					}
+					break;
 				}
-				if (fc.Condo / fc.Office < 0.5) {
-					qolScore++;
-					qolComments.push('Plenty of jobs!');
-				}
-				// needs no commercial within 1 floor
-				var c = com(tower, i);
-				if (c) {
-					qolScore += c;
-					qolComments.push('It\'s too noisy.');
-				}
-				// needs high enough res/com ratio
-				if ((fc.Condo + fc.hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) > 6) {
-					qolScore--;
-					qolComments.push('There\'s nothing to do!');
-				}
-				if ((fc.Condo + fc.Hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) < 3) {
-					qolScore++;
-					qolComments.push('There\'s lots of activities!');
-				}
-				// needs high enough police ratio
-				if (tower.floors.count / fc.Security > 50) {
-					qolScore--;
-					qolComments.push('It\'s not safe in this building.');
-				}
-				if (tower.floors.count / fc.Security < 20) {
-					qolScore++;
-					qolComments.push('I feel safe in my home.');
-				}
-				// needs high enough medical ratio
-				if (tower.floors.count / fc.Medical > 100) {
-					qolScore -= 3;
-					qolComments.push('It takes too long to see a doctor.');
-				}
-				if (tower.floors.count / fc.Medical < 40) {
-					qolScore++;
-					qolComments.push('This building has excellent medical care.');
-				}
-				break;
-			case 'Office':
-				// needs enough condos
-				if (fc.Office / fc.Condo > 1.5 && r80()) {
-					qolScore--;
-					qolComments.push('There aren\'t enough workers.');
-				}
-				if (fc.Office / fc.Condo < 0.5) {
-					qolScore++;
-					qolComments.push('Plenty of talent!');
-				}
-				// needs no commercial within 1 floors
-				c = com(tower, i);
-				if (c) {
-					qolScore += c;
-					qolComments.push('It\'s too noisy.');
-				}
-				// needs high enough restaurant ratio
-				if (fc.Office / fc.Restaurant < 10 && r80()) {
-					qolScore -= 3;
-					qolComments.push ('There\s nowhere to eat lunch!');
-				}
-				if (fc.Office / fc.Restaurant > 3) {
-					qolScore++;
-					qolComments.push ('There\s plenty of food places around here.');
-				}
-				// needs high enough police ratio
-				if (tower.floors.count / fc.Security > 50) {
-					qolScore -= 3;
-					qolComments.push('It\'s not safe in this building.');
-				}
-				if (tower.floors.count / fc.Security < 20) {
-					qolScore++;
-					qolComments.push('I feel safe here.');
-				}
-				break;
-			case 'Hotel':
-				// needs enough housekeeping
-				if (fc.Hotel / fc.Housekeeping > 10 && r80()) {
-					qolScore -= 3;
-					qolComments.push('These rooms are filthy!');
-				}
-				if (fc.hotel / fc.Housekeeping < 6) {
-					qolScore ++;
-					qolComments.push('Clean rooms!');
-				}
-				// needs no commercial within 1 floor
-				c = com(tower, i);
-				if (c) {
-					qolScore += c;
-					qolComments.push('It\'s too noisy.');
-				}
-				// needs enough commerical properties
-				if (tower.floors.count / (fc.Restaurant + fc.Shop + fc.Theatre) > 3  && r80()) {
-					qolScore--;
-					qolComments.push('There\'s not enough to do in this Tower.');
-				}
-				if (tower.floors.count / (fc.Restaurant + fc.Shop + fc.Theatre) < 2.5) {
-					qolScore++;
-					qolComments.push('Lots to do here!');
-				}
-				break;
-			case 'Restaurant':
-				// needs enough res/com/hotel
-				if ((fc.Condo + fc.Hotel + fc.Office) / fc.Restaurant < 8 && r80()) {
-					qolScore--;
-					qolComments.push('Not enough patrons.');
-				}
-				if((fc.Condo + fc.Hotel + fc.Office) / fc.Restaurant > 12) {
-					qolScore++;
-					qolComments.push('Plenty of business!');
-				}
-				// needs high enough police ratio
-				if (tower.floors.count / fc.Security > 50) {
-					qolScore -= 3;
-					qolComments.push('It\'s not safe in this building.');
-				}
-				if (tower.floors.count / fc.Security < 20) {
-					qolScore++;
-					qolComments.push('I feel safe here.');
-				}
-				break;
-			case 'Shop':
-				// needs enough res/com/hotel
-				if ((fc.Condo + fc.Hotel + fc.Office) / fc.Shop < 8 && r80()) {
-					qolScore--;
-					qolComments.push('Not enough patrons.');
-				}
-				if((fc.Condo + fc.Hotel + fc.Office) / fc.Shop > 12) {
-					qolScore++;
-					qolComments.push('Plenty of business!');
-				}
-				// needs high enough police ratio
-				if (tower.floors.count / fc.Security > 50) {
-					qolScore -= 3;
-					qolComments.push('It\'s not safe in this building.');
-				}
-				if (tower.floors.count / fc.Security < 20) {
-					qolScore++;
-					qolComments.push('I feel safe here.');
-				}
-				break;
-			case 'Theatre':
-				// needs minimum population
-				// needs enough res/com/hotel
-				if ((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre < 8 || population(tower) < 1000) {
-					qolScore--;
-					qolComments.push('Not enough patrons.');
-				}
-				if((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre > 12) {
-					qolScore++;
-					qolComments.push('Plenty of business!');
-				}
-				// needs high enough police ratio
-				if (tower.floors.count / fc.Security > 50) {
-					qolScore -= 3;
-					qolComments.push('It\'s not safe in this building.');
-				}
-				if (tower.floors.count / fc.Security < 20) {
-					qolScore++;
-					qolComments.push('I feel safe here.');
-				}
-				break;
-			case 'Housekeeping':
-			case 'Medical':
-			case 'Security':
-				return false;
+				var qolString = 'Neutral';
+				if (qolScore < 0)
+					qolString = 'Bad';
+				if (qolScore > 0)
+					qolString = 'Good';
+				tower.floors[i].tenants.qol = qolString;
+				tower.floors[i].tenants.qolComments = qolComments;
 			}
 		}
-		// calculate rents based on the updated tower
-		// move time forward
-		// write the tower back to json
-		if (req.xhr) {
-			// ajax request, return HTML blocks
-			res.send(fs.readFileSync('tower.json', 'utf8'));
-		} else {
-			// http request, redirect to static index
-			var path = '/';
-			if (req.query.l)
-				path = '/?l=' + req.query.l;
-			res.redirect(path);
+		var revenue = 0;
+		for (i=0; i<tower.floors.length; i++) {
+			// calculate rents based on the updated tower
+			var inc = rev(tower, i);
+			if (inc.daily && t_nighttime) {
+				revenue += inc.amount;
+			}
+			if (inc.quarter && t_quarter) {
+				revenue += inc.amount;
+			}
+			// move people out if they're unhappy
+			// condo, office - quarterly
+			// hotel - daily
+			if (tower.floors[i].tenants) {
+				if (tower.floors[i].tenants.qol == 'Bad') {
+					if (tower.floors[i].tenants.occupied && (
+						(
+							t_quarter && (
+								tower.floors[i].type == 'Condo' ||
+								tower.floors[i].type == 'Office'
+							)
+						) || (
+							t_daytime && (
+								tower.floors[i].type == 'Hotel'
+							)
+						)
+					) && r75()) {
+						tower.floors[i].tenants.occupied = false;
+					}
+				} else if (tower.floors[i].tenants.qol == 'Neutral') {
+					if (!tower.floors[i].tenants.occupied &&
+						t_quarter &&
+						(
+							tower.floors[i].type == 'Condo' ||
+							tower.floors[i].type == 'Office'
+						)
+					) {
+						tower.floors[i].tenants.occupied = true;
+					} else if (t_daytime && tower.floors[i].type == 'Hotel') {
+						if (r75()) {
+							tower.floors[i].tenants.occupied = true;
+						} else {
+							tower.floors[i].tenants.occupied = false;
+						}
+					}
+				} else { // qol = good
+					if (!tower.floors[i].tenants.occupied && (
+						(
+							t_quarter && (
+								tower.floors[i].type == 'Condo' ||
+								tower.floors[i].type == 'Office'
+							)
+						) || (
+							t_daytime && (
+								tower.floors[i].type == 'Hotel'
+							)
+						)
+					)) {
+						tower.floors[i].tenants.occupied = true;
+					}
+				}
+			}
 		}
+		tower.cash += revenue;
+		// move time forward
+		tower.ticks++;
+		// write the tower back to json
+		fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+			if (req.xhr) {
+				// ajax request, return HTML blocks
+				res.send(fs.readFileSync('tower.json', 'utf8'));
+			} else {
+				// http request, redirect to static index
+				var path = '/';
+				if (req.query.l)
+					path = '/?l=' + req.query.l;
+				res.redirect(path);
+			}
+		});
 	});
 };
 
@@ -627,6 +697,11 @@ var index = function(req, res) {
 		tower.floors = tower.floors.reverse();
 		tower.height = tower.floors.length + 1;
 		tower.population = population(tower);
+		tower.time = t_daytime(tower) ? 'Daytime' : 'Nighttime';
+		tower.day = Math.floor(tower.ticks / 2);
+		tower.quarter = Math.floor(tower.ticks / 90) + 1;
+		tower.year = Math.floor(tower.ticks/360) + 1;
+		tower.l = req.query.l ? req.query.l : tower.floors.length;
 
 		if (req.query.l)
 			var l = req.query.l < 14 ? 14 : req.query.l;
