@@ -539,11 +539,8 @@ var tick = function(req, res) {
 				// ajax request, return HTML blocks
 				res.send(fs.readFileSync('tower.json', 'utf8'));
 			} else {
-				// http request, redirect to static index
-				var path = '/';
-				if (req.query.l)
-					path = '/?l=' + req.query.l;
-				res.redirect(path);
+				// generate index
+				index(req, res);
 			}
 		});
 	});
@@ -568,11 +565,11 @@ var level = function(req, res) {
 				tower.cash = tower.cash - 500;
 				tower.floors.push({});
 				fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-					res.redirect('/');
+					index(req, res);
 				});
 			} else {
 				// need an error state
-				res.redirect('/?l=' + req.query.f);
+				index(req, res);
 			}
 		} else {
 			var idx = req.query.f - 1;
@@ -584,7 +581,7 @@ var level = function(req, res) {
 							tower.cash = tower.cash - 80000;
 							tower.floors[idx] = {};
 							fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-								res.redirect('/?l=' + req.query.f);
+								index(req, res);
 							});
 						} else {
 							//error state here when we dont have cash to delete
@@ -592,7 +589,7 @@ var level = function(req, res) {
 					} else {
 						tower.floors[idx] = {};
 						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-							res.redirect('/?l=' + req.query.f);
+							index(req, res);
 						});
 					}
 				} else {
@@ -666,11 +663,11 @@ var level = function(req, res) {
 					if (tower.cash >= cost) {
 						tower.cash = tower.cash - cost;
 						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-							res.redirect('/?l=' + req.query.f);
+							index(req, res);
 						});
 					} else {
 						// need an error state
-						res.redirect('/?l=' + req.query.f);
+						index(req, res);
 					}
 				} else {
 					// picker
@@ -701,6 +698,7 @@ var index = function(req, res) {
 		tower.quarter = Math.floor(tower.ticks / 90) + 1;
 		tower.year = Math.floor(tower.ticks/360) + 1;
 		tower.l = req.query.l ? req.query.l : tower.floors.length;
+		tower.rn = Math.ceil(Math.random() * 100);
 
 		if (req.query.l)
 			var l = req.query.l < 14 ? 14 : req.query.l;
