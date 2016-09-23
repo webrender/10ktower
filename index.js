@@ -55,10 +55,24 @@ app.listen(3000, function () {
 //                          |__/
 
 // Derive time periods from ticks
-var t_daytime = function(tower){return tower.ticks % 2 == 0;};
-var t_nighttime = function(tower){return tower.ticks % 2 > 0;};
-var t_quarter = function(tower){return tower.ticks % 90 == 0;};
-// var t_year = function(tower){return tower.ticks % 360 == 0;};
+var t_daytime = function(tower){
+	var tickDate = new Date(tower.ticks);
+	if (tickDate.getHours() < 6 || tickDate.getHours() > 18)
+		return false;
+	return true;
+};
+var t_nighttime = function(tower){
+	var tickDate = new Date(tower.ticks);
+	if (tickDate.getHours() < 6 || tickDate.getHours() > 18)
+		return true;
+	return false;
+};
+var t_quarter = function(tower){
+	tower.population = population(tower);
+	var tickDate = new Date(tower.ticks);
+	var days = Math.floor(tickDate/8.64e7);
+	return days % 90 == 0;
+};
 
 var com = function(tower, i) {
 	var total = 0;
@@ -532,7 +546,7 @@ var tick = function(req, res) {
 		}
 		tower.cash += revenue;
 		// move time forward
-		tower.ticks++;
+		tower.ticks += 1000*60*60*12;
 		// write the tower back to json
 		fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
 			if (req.xhr) {
@@ -693,10 +707,12 @@ var index = function(req, res) {
 		tower.floors = tower.floors.reverse();
 		tower.height = tower.floors.length + 1;
 		tower.population = population(tower);
-		tower.time = t_daytime(tower) ? 'Daytime' : 'Nighttime';
-		tower.day = Math.floor((tower.ticks % 90) / 2);
-		tower.quarter = Math.floor(tower.ticks / 90) + 1;
-		tower.year = Math.floor(tower.ticks/360) + 1;
+		var tickDate = new Date(tower.ticks);
+		tower.time = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? 'Nighttime' : 'Daytime';
+		tower.backgroundPosition = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? '0' : '-550vh;';
+		tower.day = Math.floor(tickDate/8.64e7);
+		tower.quarter = Math.floor(tower.day/90) + 1;
+		tower.year = Math.floor(tower.day/360) + 1;
 		tower.l = req.query.l ? req.query.l : tower.floors.length;
 		tower.rn = Math.ceil(Math.random() * 100);
 
