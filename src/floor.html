@@ -3,16 +3,17 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="base.css?__inline=true" rel="stylesheet" />
 </head>
 <body>
 {{/xhr}}
 <link href="floor.css?__inline=true" rel="stylesheet" />
-<center class="sb centered">
+<center class="centered -b">
     <span>Floor {{level}}: {{type}}</span>
 <a href=""><hr></a>
 </center>
 <center class="centered">
-<span class="modal_body">
+<span class="mb">
     <br class="lo">
     {{#tenants}}
         <span class="f">
@@ -51,7 +52,7 @@
             <br class="lo">
         {{/qol}}
     {{/tenants}}
-    <span class="f">
+    <span class="f" f="{{level}}" u="x">
         <a href="/?f={{level}}&u=x" class="-d"><b>Delete Unit{{#cost}} ($80k){{/cost}}</b></a>
     </span>
 </span>

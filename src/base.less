@@ -56,6 +56,11 @@ center {
 }
 center.centered {
     justify-content: center;
+
+    &.-b {
+        background: black;
+        padding: 10px;
+    }
 }
 .sb span, .sb a {
     padding: 5px;
@@ -94,6 +99,21 @@ center.centered {
     left: 0;
     z-index:-1;
 }
+.f img {
+    position: relative;
+}
+.f img:after {
+    display: block;
+    content: '';
+    height: 24px;
+    width: 24px;
+    position: absolute;
+    top: 2px;
+    left: 12px;
+}
+.f img.h:after { background-color: #50E3C2; }
+.f img.s:after { background-color: #EF5350; }
+.f img.n:after { background-color: #FFDD67; }
 // Hotel
 .f.-h {
     background-color: #FFAAFF;
@@ -179,6 +199,6 @@ center.centered {
     background-color: transparent !important;
 }
 
-.modal_body {
-    margin-top: 70px;
+.mb {
+    margin-top: 20px;
 }

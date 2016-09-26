@@ -5,13 +5,39 @@ window.onload = function() {
 		for (var i = 0; i < floors.length; i++) {
 			floors[i].onclick = function(event) {
 				event.preventDefault();
-				console.log(this.querySelectorAll('a')[0].href);
 				var xhr = new XMLHttpRequest();
 				xhr.open('GET', this.querySelectorAll('a')[0].href);
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 				xhr.onload = function() {
 					if (xhr.status === 200) {
-						console.log(xhr.responseText);
+						var modal = document.createElement('div');
+						modal.id = 'm';
+						modal.innerHTML = xhr.responseText;
+						var modalbg = document.createElement('div');
+						modalbg.id = 'mb';
+						modalbg.onclick = function() {
+							modal.remove();
+							modalbg.remove();
+							ssp(100);
+
+						};
+						document.body.appendChild(modal);
+						document.body.appendChild(modalbg);
+						ssp(0);
+						var opts = modal.querySelectorAll('.f');
+						for (var j = 0 ; j < opts.length; j++) {
+							opts[j].onclick = function(e) {
+								e.preventDefault();
+								var f = this.getAttribute('f');
+								var u = this.getAttribute('u');
+								if (f && u) {
+									gt('/?f='+f+'&u='+u);
+									modal.remove();
+									modalbg.remove();
+									ssp(100);
+								}
+							};
+						}
 					}
 				};
 				xhr.send();

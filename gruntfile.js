@@ -43,7 +43,8 @@ module.exports = function(grunt) {
             files: {
                 'dist/index.css':'src/index.less',
                 'dist/picker.css':'src/picker.less',
-                'dist/floor.css':'src/floor.less'
+                'dist/floor.css':'src/floor.less',
+                'dist/base.css':'src/base.less'
             }
         }
     },
@@ -56,7 +57,8 @@ module.exports = function(grunt) {
             files: {
                 'dist/index.css': 'dist/index.css',
                 'dist/picker.css': 'dist/picker.css',
-                'dist/floor.css': 'dist/floor.css'
+                'dist/floor.css': 'dist/floor.css',
+                'dist/base.css': 'dist/base.css',
             }
         }
     },

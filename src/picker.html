@@ -4,67 +4,68 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="base.js?__inline=true"></script>
+<link href="base.css?__inline=true" rel="stylesheet" />
 </head>
 <body>
 {{/xhr}}
 <link href="picker.css?__inline=true" rel="stylesheet" />
-<center class="sb centered">
+<center class="centered -b">
     <span>Choose a Unit for Floor {{floor}}:</span>
 <hr>
 </center>
 <center class="centered">
-<span class="modal_body">
+<span class="mb">
     <span aria-hidden="true" class="lo">_____________________</span>
     <br class="lo">
-    <span class="f -c">
+    <span class="f -c" f="{{floor}}" u="c">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=c">80k</a>&nbsp;&nbsp;<b>Condo</b>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -o">
+    <span class="f -o" f="{{floor}}" u="o">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=o">40k</a>&nbsp;&nbsp;<code>Office</code>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -h">
+    <span class="f -h" f="{{floor}}" u="h">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=h">50k</a>&nbsp;&nbsp;<tt>Hotel</tt>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -m">
+    <span class="f -m" f="{{floor}}" u="m">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=m">50k</a>&nbsp;&nbsp;<i>Housekeeping</i>
         <span aria-hidden="true" class="lo">|</span>
     </span>
     <br class="lo">
-    <span class="f -p">
+    <span class="f -p" f="{{floor}}" u="p">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=p">100k</a> <i>Security</i>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;|</span>
         </span>
     <br class="lo">
-    <span class="f -d">
+    <span class="f -d" f="{{floor}}" u="d">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=d">500k</a> <i>Medical</i>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -r">
+    <span class="f -r" f="{{floor}}" u="r">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=r">100k</a> <strong>Restaurant</strong>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -s">
+    <span class="f -s" f="{{floor}}" u="s">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=s">100k</a> <strong>Shop</strong>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
     </span>
     <br class="lo">
-    <span class="f -t">
+    <span class="f -t" f="{{floor}}" u="t">
         <span aria-hidden="true" class="lo">|</span>
         <a href="/?f={{floor}}&u=t">500k</a> <strong>Theatre</strong>
         <span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
