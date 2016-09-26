@@ -549,13 +549,7 @@ var tick = function(req, res) {
 		tower.ticks += 1000*60*60*12;
 		// write the tower back to json
 		fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-			if (req.xhr) {
-				// ajax request, return HTML blocks
-				res.send(fs.readFileSync('tower.json', 'utf8'));
-			} else {
-				// generate index
-				index(req, res);
-			}
+			index(req, res);
 		});
 	});
 };
@@ -612,6 +606,7 @@ var level = function(req, res) {
 					floor.level = req.query.f;
 					floor.pop = pop(tower, idx);
 					floor.rev = rev(tower, idx);
+					floor.xhr = req.xhr;
 					//cost - occupied condos must be bought back from owners
 					floor.cost = tower.floors[idx].type == 'Condo' &&
 							tower.floors[idx].tenants.occupied == true ?
@@ -685,7 +680,7 @@ var level = function(req, res) {
 					}
 				} else {
 					// picker
-					res.render('picker',{floor: idx+1});
+					res.render('picker',{floor: idx+1, xhr: req.xhr});
 				}
 			}
 		}
@@ -713,9 +708,10 @@ var index = function(req, res) {
 		tower.day = Math.floor(tickDate/8.64e7);
 		tower.quarter = Math.floor(tower.day/90) + 1;
 		tower.year = Math.floor(tower.day/360) + 1;
+		tower.dateString = tower.time + ', ' + 'D' + tower.day + '/Q' + tower.quarter + '/Y' + tower.year;
 		tower.l = req.query.l ? req.query.l : tower.floors.length;
+		tower.lp = req.query.l ? req.query.l : false;
 		tower.rn = Math.ceil(Math.random() * 100);
-
 		if (req.query.l)
 			var l = req.query.l < 14 ? 14 : req.query.l;
 
@@ -729,6 +725,10 @@ var index = function(req, res) {
 			return floor;
 		};
 
+		tower.floorCopy = function() {
+			return floor;
+		};
+
 		tower.floor_padded = function() {
 			var str = '' + floor;
 			var pad = '00';
@@ -736,7 +736,7 @@ var index = function(req, res) {
 			return floor_padded;
 		};
 
-		if (tower.floors.length > 14) {
+		if (tower.floors.length > 14 && !req.xhr) {
 			var start = l ? (tower.floors.length - l) : 0;
 			start = start < 0 ? 0 : start;
 			start = l < 14 ? 0 : start;
@@ -835,6 +835,8 @@ var index = function(req, res) {
 		};
 
 		tower.floorDown = function () {
+			if (req.xhr)
+				return false;
 			var topFloor = parseInt(l && tower.floors.length >= l ? l : tower.floors.length);
 			var botFloor = topFloor - 13 > 1 ? topFloor - 13 : 1;
 			if (botFloor == 1) {
@@ -892,6 +894,19 @@ var index = function(req, res) {
 			return tower.cash.toLocaleString('en-US');
 		};
 
-		res.render('index', tower);
+		if (req.xhr) {
+			// ajax request, return HTML blocks
+			res.render('tower', tower, function(e,html) {
+				res.json({
+					pop: tower.population,
+					time: tower.dateString,
+					cash: tower.cashF,
+					tower: html
+				});
+			});
+		} else {
+			// generate index
+			res.render('index', tower);
+		}
 	});
 };

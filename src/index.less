@@ -4,7 +4,6 @@ body {
     background: linear-gradient(to bottom, #00000c,#191621,#20202c,#3a3a52,#515175,#8a76ab,#cd82a0,#eab0d1,#ebb2b1,#b1b5ea,#94dfff,#67d1fb,#38a3d1,#246fa8,#1e528e,#5b7983,#9da671,#e9ce5d,#b26339,#00000c);
     background-size: 100% 1000vh;
     background-attachment: fixed;
-    transform: translateZ(0);
 }
 body:before {
     content: '';
@@ -16,10 +15,10 @@ body:before {
     background: url('i.svg') ~"0px 60px/60px auto";
 }
 // Floors
-.f, .bt, .af, .bb {
+.f, .bt, #af, .bb {
     display: block;
 }
-.f, .af, .bb {
+.f, #af, .bb {
     color: #CCCCCC;
     background: black;
     padding: 0;
@@ -27,7 +26,7 @@ body:before {
     display: flex;
     align-items: center;
 }
-.af, .bb {
+#af, .bb {
     justify-content: center;
 }
 .f img, .f .sp {
@@ -66,6 +65,31 @@ body:before {
     padding: 0;
     position: relative;
     right: 9px;
+
+    ul {
+        position: absolute;
+        top: 35px;
+        padding: 0;
+        margin: 0;
+        display:none;
+    }
+
+    &:hover {
+        ul {
+            display: block;
+        }
+    }
+
+    li {
+        list-style-type: none;
+        font-size: 12px;
+        background: #666;
+        margin-bottom: 1px;
+        width: 34px;
+        font-weight: 900;
+        letter-spacing: -3px;
+        cursor: pointer;
+    }
 }
 #cf {fill:transparent;}
 #ch, #cm { fill: #fff; }

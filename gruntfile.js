@@ -7,6 +7,11 @@ module.exports = function(grunt) {
         cwd: 'src',
         src: '*.svg',
         dest: 'dist/'
+      },
+      vars: {
+        files: {
+          'dist/vars.js': 'src/vars.js'
+        }
       }
     },
     htmlmin: {
@@ -18,14 +23,15 @@ module.exports = function(grunt) {
         files: {
             'dist/index.html': 'src/index.html',
             'dist/picker.html': 'src/picker.html',
-            'dist/floor.html': 'src/floor.html'
+            'dist/floor.html': 'src/floor.html',
+            'dist/tower.html': 'src/tower.html',
         }
       }
     },
     uglify: {
       base: {
         files: {
-          'dist/base.js': ['src/base.js']
+          'dist/base.js': ['src/base.js'],
         }
       }
     },
@@ -56,6 +62,9 @@ module.exports = function(grunt) {
     },
     inline: {
         index: {
+            options: {
+              uglify: false
+            },
             src: 'dist/index.html',
             dest: 'dist/index.html'
         },
@@ -66,6 +75,10 @@ module.exports = function(grunt) {
         floor: {
             src: 'dist/floor.html',
             dest: 'dist/floor.html'
+        },
+        tower: {
+            src: 'dist/tower.html',
+            dest: 'dist/tower.html'
         }
     },
     watch: {
@@ -96,8 +109,8 @@ module.exports = function(grunt) {
         files: [
           {src: 'dist/index.html', dest: 'dist/index.mustache'},
           {src: 'dist/picker.html', dest: 'dist/picker.mustache'},
-          {src: 'dist/floor.html', dest: 'dist/floor.mustache'}
-
+          {src: 'dist/floor.html', dest: 'dist/floor.mustache'},
+          {src: 'dist/tower.html', dest: 'dist/tower.mustache'},
         ]
       }
     }

@@ -3,6 +3,7 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="index.css?__inline=true" rel="stylesheet" />
+<script src="vars.js?__inline=true"></script>
 <script src="base.js?__inline=true"></script>
 <style>
 body {background-position: 0 {{backgroundPosition}};}
@@ -10,45 +11,16 @@ body {background-position: 0 {{backgroundPosition}};}
 </head>
 <body>
 <center class="sb">
-    <span>Pop: {{population}}</span>
+    <span>Pop: <span id="zp">{{population}}</span></span>
     <span aria-hidden="true" class="lo"> | </span>
-    <span>{{time}}, D{{day}}/Q{{quarter}}/Y{{year}}</span>
+    <span id="zd">{{dateString}}</span>
     <span aria-hidden="true" class="lo"> | </span>
-    <span>${{cashF}}</span>
+    <span id="zc">${{cashF}}</span>
     <span aria-hidden="true" class="lo"> |</span>
     <span id="nt"><a href="/?t=1&l={{l}}&rn={{rn}}">Next Turn (+12h)</a></span>
 </center>
 <hr>
 <center class="t" id="t">
-    <span aria-hidden="true" class="lo">_____________________</span>
-    <br class="lo">
-    {{#floorUp}}
-    <span class="af">
-        <span aria-hidden="true" class="lo">|</span><a href="/?l={{end}}"><span aria-hidden="true" class="lo">^{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}^</span></a><span aria-hidden="true" class="lo">|</span>
-    </span>
-    {{/floorUp}}
-    {{^floorUp}}
-    <span class="af">
-        <span aria-hidden="true" class="lo">|</span><a href="/?f={{height}}"><span aria-hidden="true" class="lo">+</span> Add Floor: $500 <span aria-hidden="true" class="lo">+</span></a><span aria-hidden="true" class="lo">|</span>
-    </span>
-    {{/floorUp}}
-    <br class="lo">
-    {{#staticFloors}}
-        <span class="f {{floorClass}}">
-            <span aria-hidden="true" class="lo">|</span><a href="/?f={{floor}}">{{floor_padded}}</a>{{{qolHtml}}}{{{typeHtml}}}<span aria-hidden="true" class="lo">{{{floorPadding}}}|</span>
-        </span>
-        <br class="lo">
-    {{/staticFloors}}
-    {{#floorDown}}
-    <span class="bb">
-        <span aria-hidden="true" class="lo">|</span><a href="/?l={{end}}"><span aria-hidden="true" class="lo">v{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}v</span></a><span aria-hidden="true" class="lo">|</span>
-    </span>
-    {{/floorDown}}
-    {{^floorDown}}
-        <span class="f -l">
-            <span aria-hidden="true" class="lo">|</span><a href="">00</a><span class="sp"> &nbsp;&nbsp; </span>Lobby<span aria-hidden="true" class="lo">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|</span>
-        </span>
-        <br class="lo">
-    {{/floorDown}}
+{{> tower}}
 </center>
 </body>

@@ -1,10 +1,12 @@
+{{^xhr}}
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="floor.css?__inline=true" rel="stylesheet" />
 </head>
 <body>
+{{/xhr}}
+<link href="floor.css?__inline=true" rel="stylesheet" />
 <center class="sb centered">
     <span>Floor {{level}}: {{type}}</span>
 <a href=""><hr></a>
@@ -55,4 +57,7 @@
 </span>
 <hr>
 </center>
+{{^xhr}}
 </body>
+</html>
+{{/xhr}}

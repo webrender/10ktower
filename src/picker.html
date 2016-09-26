@@ -1,11 +1,13 @@
+{{^xhr}}
 <!DOCTYPE html>
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="picker.css?__inline=true" rel="stylesheet" />
 <script src="base.js?__inline=true"></script>
 </head>
 <body>
+{{/xhr}}
+<link href="picker.css?__inline=true" rel="stylesheet" />
 <center class="sb centered">
     <span>Choose a Unit for Floor {{floor}}:</span>
 <hr>
@@ -72,4 +74,7 @@
 
 </span>
 </center>
+{{^xhr}}
 </body>
+</html>
+{{/xhr}}
