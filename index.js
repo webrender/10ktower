@@ -570,7 +570,7 @@ var tick = function(req, res, skip) {
 var level = function(req, res) {
 	fs.readFile('tower.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
-
+		var msg = '';
 		if (req.query.f > tower.floors.length) {
 			// floor doesn't exist - add floor
 			if (tower.cash >= 500) {
@@ -581,7 +581,8 @@ var level = function(req, res) {
 				});
 			} else {
 				// need an error state
-				index(req, res);
+				msg = 'You don\'t have enough cash to perform this action';
+				index(req, res, {error: msg});
 			}
 		} else {
 			var idx = req.query.f - 1;
@@ -597,6 +598,8 @@ var level = function(req, res) {
 							});
 						} else {
 							//error state here when we dont have cash to delete
+							msg = 'You don\'t have enough cash to perform this action';
+							index(req, res, {error: msg});
 						}
 					} else {
 						tower.floors[idx] = {};
@@ -680,7 +683,8 @@ var level = function(req, res) {
 						});
 					} else {
 						// need an error state
-						index(req, res);
+						msg = 'You don\'t have enough cash to perform this action';
+						index(req, res, {error: msg});
 					}
 				} else {
 					// picker
@@ -700,7 +704,17 @@ var level = function(req, res) {
 // |  $$$$$$/ |  $$$$/|  $$$$$$$  |  $$$$/| $$|  $$$$$$$
 //  \______/   \___/   \_______/   \___/  |__/ \_______/
 
-var index = function(req, res) {
+var index = function(req, res, error) {
+	if (error) {
+		var rn = Math.ceil(Math.random() * 100);
+		if (req.xhr) {
+			res.status(402).send(error.error);
+			return false;
+		} else {
+			res.render('error', {error: error.error, rn: rn});
+			return false;
+		}
+	}
 	fs.readFile('tower.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		tower.floors = tower.floors.reverse();
@@ -904,7 +918,7 @@ var index = function(req, res) {
 				res.json({
 					pop: tower.population,
 					time: tower.dateString,
-					cash: tower.cashF,
+					cash: tower.cashF(),
 					tower: html
 				});
 			});

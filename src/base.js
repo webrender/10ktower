@@ -115,14 +115,49 @@ window.onload = function() {
 			}, s);
 		}
 	};
+	var cn = function(el, int) {
+		var current = parseInt(el.innerHTML.replace(',',''));
+		int = (typeof int == 'string' ? parseInt(int.replace(',','')) : int);
+		var iv = setInterval(function(){
+			if (current == int) {
+				clearInterval(iv);
+			} else if (current > int) {
+				if (current - int > 1000)
+					current -= 1000;
+				else if (current - int > 100)
+					current -= 100;
+				else if (current - int > 10)
+					current -= 10;
+				else
+					current--;
+			} else if (current < int) {
+				if (int - current > 1000)
+					current += 1000;
+				else if (int - current > 100)
+					current += 100;
+				else if (int - current > 10)
+					current += 10;
+				else
+					current++;
+			}
+			el.innerHTML = current.toLocaleString('en-US');
+		}, 30);
+	};
 	var gt = function(path) {
 		var mt = document.getElementById('af').getBoundingClientRect().top;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', path);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 		xhr.onload = function() {
+			var data;
 			if (xhr.status === 200) {
-				var data = JSON.parse(xhr.responseText);
+				data = JSON.parse(xhr.responseText);
+				// Update date
+				document.getElementById('zd').innerHTML = data.time;
+				// Update pop & cash
+				cn(document.getElementById('zp'), data.pop);
+				cn(document.getElementById('zc'), data.cash);
+				// Update tower
 				document.getElementById('t').style.justifyContent = 'flex-start';
 				document.getElementById('t').style.marginTop = (mt + document.body.scrollTop) + 'px';
 				document.getElementById('t').innerHTML = data.tower;
@@ -131,6 +166,16 @@ window.onload = function() {
 					l = false; //eslint-disable-line no-native-reassign
 				}
 				fc();
+			} else if (xhr.status === 402) {
+				data = xhr.responseText;
+				var ed = document.createElement('div');
+				ed.id = 'e';
+				ed.innerHTML = data;
+				document.body.appendChild(ed);
+				setTimeout(function() {
+					ed.remove();
+				}, 1000);
+
 			}
 		};
 		xhr.send();

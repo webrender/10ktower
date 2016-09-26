@@ -25,6 +25,7 @@ module.exports = function(grunt) {
             'dist/picker.html': 'src/picker.html',
             'dist/floor.html': 'src/floor.html',
             'dist/tower.html': 'src/tower.html',
+            'dist/error.html': 'src/error.html',
         }
       }
     },
@@ -81,6 +82,10 @@ module.exports = function(grunt) {
         tower: {
             src: 'dist/tower.html',
             dest: 'dist/tower.html'
+        },
+        error: {
+            src: 'dist/error.html',
+            dest: 'dist/error.html'
         }
     },
     watch: {
@@ -113,6 +118,7 @@ module.exports = function(grunt) {
           {src: 'dist/picker.html', dest: 'dist/picker.mustache'},
           {src: 'dist/floor.html', dest: 'dist/floor.mustache'},
           {src: 'dist/tower.html', dest: 'dist/tower.mustache'},
+          {src: 'dist/error.html', dest: 'dist/error.mustache'},
         ]
       }
     }
