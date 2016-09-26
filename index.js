@@ -27,9 +27,9 @@ app.set('views','./dist');
 
 app.get('/', function (req, res) {
 	if (req.query.f) {
-		// level` page
+		// level page
 		level(req,res);
-	} else if (req.query.t) {
+	} else if (typeof(req.query.t) != 'undefined') {
 		// tick handler
 		tick(req,res);
 	} else {
@@ -287,7 +287,7 @@ var rev = function(tower, idx) {
 //    | $$   | $$|  $$$$$$$| $$ \  $$
 //    |__/   |__/ \_______/|__/  \__/
 
-var tick = function(req, res) {
+var tick = function(req, res, skip) {
 	// tick eval goes here
 	// - first do a QoL check on all the floors
 	// - write the QoL output & comments to JSON
@@ -484,12 +484,14 @@ var tick = function(req, res) {
 		var revenue = 0;
 		for (i=0; i<tower.floors.length; i++) {
 			// calculate rents based on the updated tower
-			var inc = rev(tower, i);
-			if (inc.daily && t_nighttime) {
-				revenue += inc.amount;
-			}
-			if (inc.quarter && t_quarter) {
-				revenue += inc.amount;
+			if (!skip) {
+				var inc = rev(tower, i);
+				if (inc.daily && t_nighttime) {
+					revenue += inc.amount;
+				}
+				if (inc.quarter && t_quarter) {
+					revenue += inc.amount;
+				}
 			}
 			// move people out if they're unhappy
 			// condo, office - quarterly
@@ -545,8 +547,10 @@ var tick = function(req, res) {
 			}
 		}
 		tower.cash += revenue;
-		// move time forward
-		tower.ticks += 1000*60*60*12;
+		if (!skip) {
+			// move time forward
+			tower.ticks += 1000*60*60*12;
+		}
 		// write the tower back to json
 		fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
 			index(req, res);
@@ -589,7 +593,7 @@ var level = function(req, res) {
 							tower.cash = tower.cash - 80000;
 							tower.floors[idx] = {};
 							fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-								index(req, res);
+								tick(req, res, true);
 							});
 						} else {
 							//error state here when we dont have cash to delete
@@ -597,7 +601,7 @@ var level = function(req, res) {
 					} else {
 						tower.floors[idx] = {};
 						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-							index(req, res);
+							tick(req, res, true);
 						});
 					}
 				} else {
@@ -672,7 +676,7 @@ var level = function(req, res) {
 					if (tower.cash >= cost) {
 						tower.cash = tower.cash - cost;
 						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
-							index(req, res);
+							tick(req, res, true);
 						});
 					} else {
 						// need an error state

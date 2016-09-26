@@ -16,10 +16,9 @@ window.onload = function() {
 						var modalbg = document.createElement('div');
 						modalbg.id = 'mb';
 						modalbg.onclick = function() {
+							ssp(100);
 							modal.remove();
 							modalbg.remove();
-							ssp(100);
-
 						};
 						document.body.appendChild(modal);
 						document.body.appendChild(modalbg);
@@ -32,9 +31,9 @@ window.onload = function() {
 								var u = this.getAttribute('u');
 								if (f && u) {
 									gt('/?f='+f+'&u='+u);
+									ssp(100);
 									modal.remove();
 									modalbg.remove();
-									ssp(100);
 								}
 							};
 						}
@@ -129,7 +128,7 @@ window.onload = function() {
 				document.getElementById('t').innerHTML = data.tower;
 				if (l) {
 					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
-					l = false
+					l = false; //eslint-disable-line no-native-reassign
 				}
 				fc();
 			}
