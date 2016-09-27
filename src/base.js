@@ -158,7 +158,6 @@ window.onload = function() {
 				cn(document.getElementById('zc'), data.cash);
 				// Update tower
 				document.getElementById('t').innerHTML = data.tower;
-				console.log(document.getElementById('t').clientHeight);
 				flexCheck(document.getElementById('t'));
 				if (l) {
 					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
