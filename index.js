@@ -524,8 +524,7 @@ var tick = function(req, res, skip) {
 				case 'Restaurant':
 				case 'Shop':
 				case 'Theatre':
-					if (tower.floors[i].tenants)
-						delete tower.floors[i].tenants;
+					tower.floors[i].tenants.occupied = true;
 					break;
 				case 'Condo':
 					switch (tower.floors[i].tenants.qol) {
@@ -706,14 +705,17 @@ var level = function(req, res) {
 						break;
 					case 'r':
 						type = 'Restaurant';
+						tenants = true;
 						cost = 100000;
 						break;
 					case 's':
 						type = 'Shop';
+						tenants = true;
 						cost = 100000;
 						break;
 					case 't':
 						type = 'Theatre';
+						tenants = true;
 						cost = 500000;
 						break;
 					}
