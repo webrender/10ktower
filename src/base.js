@@ -183,11 +183,4 @@ window.onload = function() {
 
 	gt('/');
 	ssp(100);
-
-	var the_date = new Date();
-	var unix_time = the_date.getTime();
-	var expiration = unix_time + 2.592e6;
-	the_date.setTime( expiration );
-	document.cookie = 'last_tower='+tid+'; expires=' + the_date.toGMTString();
-
 };

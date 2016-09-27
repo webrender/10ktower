@@ -27,6 +27,7 @@ module.exports = function(grunt) {
             'dist/tower.html': 'src/tower.html',
             'dist/error.html': 'src/error.html',
             'dist/home.html': 'src/home.html',
+            'dist/about.html': 'src/about.html',
         }
       }
     },
@@ -48,6 +49,7 @@ module.exports = function(grunt) {
                 'dist/floor.css':'src/floor.less',
                 'dist/base.css':'src/base.less',
                 'dist/home.css':'src/home.less',
+                'dist/about.css':'src/about.less',
             }
         }
     },
@@ -63,6 +65,7 @@ module.exports = function(grunt) {
                 'dist/floor.css': 'dist/floor.css',
                 'dist/base.css': 'dist/base.css',
                 'dist/home.css': 'dist/home.css',
+                'dist/about.css': 'dist/about.css',
             }
         }
     },
@@ -93,6 +96,10 @@ module.exports = function(grunt) {
         home: {
             src: 'dist/home.html',
             dest: 'dist/home.html'
+        },
+        about: {
+            src: 'dist/about.html',
+            dest: 'dist/about.html'
         }
     },
     watch: {
@@ -127,6 +134,7 @@ module.exports = function(grunt) {
           {src: 'dist/tower.html', dest: 'dist/tower.mustache'},
           {src: 'dist/error.html', dest: 'dist/error.mustache'},
           {src: 'dist/home.html', dest: 'dist/home.mustache'},
+          {src: 'dist/about.html', dest: 'dist/about.mustache'},
         ]
       }
     }

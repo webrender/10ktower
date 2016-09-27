@@ -29,7 +29,6 @@ app.set('view engine', 'mustache');
 app.set('views','./dist');
 
 app.get('/', function(req,res){
-	console.log(req.cookies);
 	res.render('home', {tid: req.cookies.last_tower});
 });
 
@@ -38,6 +37,10 @@ app.get('/new/', function(req, res) {
 	fs.writeFile('towers/'+tid+'.json', JSON.stringify({'ticks':0,'cash':100000,'floors':[]}), 'utf8', function() {
 		res.redirect('/'+tid+'/');
 	});
+});
+
+app.get('/about/', function(req, res) {
+	res.render('about');
 });
 
 app.get('/:towerid/', function (req, res) {
@@ -726,6 +729,7 @@ var level = function(req, res) {
 //  \______/   \___/   \_______/   \___/  |__/ \_______/
 
 var index = function(req, res, error) {
+	res.cookie('last_tower', req.params.towerid, { maxAge: 900000, httpOnly: false});
 	if (error) {
 		var rn = Math.ceil(Math.random() * 100);
 		if (req.xhr) {
