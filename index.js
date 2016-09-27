@@ -25,17 +25,24 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views','./dist');
 
-app.get('/', function (req, res) {
-	if (req.query.f) {
-		// level page
-		level(req,res);
-	} else if (typeof(req.query.t) != 'undefined') {
-		// tick handler
-		tick(req,res);
-	} else {
-		// static page
-		index(req,res);
-	}
+app.get('/:towerid/', function (req, res) {
+	fs.readFile(req.params.towerid+'.json', 'utf8', function(err) {
+		if (err) {
+			res.status(404).send('404: Tower Not Found');
+			return false;
+		} else {
+			if (req.query.f) {
+				// level page
+				level(req,res);
+			} else if (typeof(req.query.t) != 'undefined') {
+				// tick handler
+				tick(req,res);
+			} else {
+				// static page
+				index(req,res);
+			}
+		}
+	});
 });
 
 app.listen(3000, function () {
@@ -294,7 +301,7 @@ var tick = function(req, res, skip) {
 	// - based on QoL, move tehants in/out
 	// - if its the end of the day/quarter assess rent/income
 	// - either redirect to the index, or return JSON if it's an XHR
-	fs.readFile('tower.json', 'utf8', function(err, data) {
+	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		// lets count all our floors for calcs in the next loop
 		var fc = {};
@@ -552,7 +559,7 @@ var tick = function(req, res, skip) {
 			tower.ticks += 1000*60*60*12;
 		}
 		// write the tower back to json
-		fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+		fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 			index(req, res);
 		});
 	});
@@ -568,7 +575,7 @@ var tick = function(req, res, skip) {
 // |________/ \_______/    \_/    \_______/|__/
 
 var level = function(req, res) {
-	fs.readFile('tower.json', 'utf8', function(err, data) {
+	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		var msg = '';
 		if (req.query.f > tower.floors.length) {
@@ -576,7 +583,7 @@ var level = function(req, res) {
 			if (tower.cash >= 500) {
 				tower.cash = tower.cash - 500;
 				tower.floors.push({});
-				fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+				fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 					index(req, res);
 				});
 			} else {
@@ -593,7 +600,7 @@ var level = function(req, res) {
 						if (tower.cash > 80000) {
 							tower.cash = tower.cash - 80000;
 							tower.floors[idx] = {};
-							fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+							fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 								tick(req, res, true);
 							});
 						} else {
@@ -603,7 +610,7 @@ var level = function(req, res) {
 						}
 					} else {
 						tower.floors[idx] = {};
-						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+						fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 							tick(req, res, true);
 						});
 					}
@@ -614,6 +621,7 @@ var level = function(req, res) {
 					floor.pop = pop(tower, idx);
 					floor.rev = rev(tower, idx);
 					floor.xhr = req.xhr;
+					floor.tid = req.params.towerid;
 					//cost - occupied condos must be bought back from owners
 					floor.cost = tower.floors[idx].type == 'Condo' &&
 							tower.floors[idx].tenants.occupied == true ?
@@ -678,7 +686,7 @@ var level = function(req, res) {
 					}
 					if (tower.cash >= cost) {
 						tower.cash = tower.cash - cost;
-						fs.writeFile('tower.json', JSON.stringify(tower), 'utf8', function() {
+						fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 							tick(req, res, true);
 						});
 					} else {
@@ -688,7 +696,7 @@ var level = function(req, res) {
 					}
 				} else {
 					// picker
-					res.render('picker',{floor: idx+1, xhr: req.xhr});
+					res.render('picker',{floor: idx+1, xhr: req.xhr, tid: req.params.towerid});
 				}
 			}
 		}
@@ -711,11 +719,11 @@ var index = function(req, res, error) {
 			res.status(402).send(error.error);
 			return false;
 		} else {
-			res.render('error', {error: error.error, rn: rn});
+			res.render('error', {error: error.error, rn: rn, tid: req.params.towerid});
 			return false;
 		}
 	}
-	fs.readFile('tower.json', 'utf8', function(err, data) {
+	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		tower.floors = tower.floors.reverse();
 		tower.height = tower.floors.length + 1;
@@ -730,6 +738,7 @@ var index = function(req, res, error) {
 		tower.l = req.query.l ? req.query.l : tower.floors.length;
 		tower.lp = req.query.l ? req.query.l : false;
 		tower.rn = Math.ceil(Math.random() * 100);
+		tower.tid = req.params.towerid;
 		if (req.query.l)
 			var l = req.query.l < 14 ? 14 : req.query.l;
 
@@ -804,11 +813,11 @@ var index = function(req, res, error) {
 			if (this.tenants && this.tenants.qol) {
 				switch (this.tenants.qol) {
 				case 'Good':
-					return '<img src="i.svg" class="h" alt=":)">';
+					return '<img src="../i.svg" class="h" alt=":)">';
 				case 'Bad':
-					return '<img src="i.svg" class="s" alt=":(">';
+					return '<img src="../i.svg" class="s" alt=":(">';
 				case 'Neutral':
-					return '<img src="i.svg" class="n" alt=":|">';
+					return '<img src="../i.svg" class="n" alt=":|">';
 				}
 			} else {
 				return '<span class="sp"> &nbsp;&nbsp; </span>';
@@ -883,7 +892,6 @@ var index = function(req, res, error) {
 
 		tower.floorUp = function () {
 			var topFloor = parseInt(l && tower.floors.length >= l ? l : tower.floors.length);
-			// var botFloor = topFloor - 13 > 1 ? topFloor - 13 : 1;
 			if (topFloor + 1 > tower.floors.length) {
 				return false;
 			}

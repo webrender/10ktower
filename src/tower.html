@@ -2,24 +2,24 @@
 <br class="lo">
 {{#floorUp}}
 <span id="af">
-    <span aria-hidden="true" class="lo">|</span><a href="/?l={{end}}&rn={{rn}}"><span aria-hidden="true" class="lo">^{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}^</span></a><span aria-hidden="true" class="lo">|</span>
+    <span aria-hidden="true" class="lo">|</span><a href="/{{tid}}/?l={{end}}&rn={{rn}}"><span aria-hidden="true" class="lo">^{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}^</span></a><span aria-hidden="true" class="lo">|</span>
 </span>
 {{/floorUp}}
 {{^floorUp}}
 <span id="af">
-    <span aria-hidden="true" class="lo">|</span><a href="/?f={{height}}&rn={{rn}}"><span aria-hidden="true" class="lo">+</span> Add Floor: $500 <span aria-hidden="true" class="lo">+</span></a><span aria-hidden="true" class="lo">|</span>
+    <span aria-hidden="true" class="lo">|</span><a href="/{{tid}}/?f={{height}}&rn={{rn}}"><span aria-hidden="true" class="lo">+</span> Add Floor: $500 <span aria-hidden="true" class="lo">+</span></a><span aria-hidden="true" class="lo">|</span>
 </span>
 {{/floorUp}}
 <br class="lo">
 {{#staticFloors}}
     <span class="f {{floorClass}}" id="f{{floor}}">
-        <span aria-hidden="true" class="lo">|</span><a href="/?f={{floorCopy}}&rn={{rn}}">{{floor_padded}}</a>{{{qolHtml}}}{{{typeHtml}}}<span aria-hidden="true" class="lo">{{{floorPadding}}}|</span>
+        <span aria-hidden="true" class="lo">|</span><a href="/{{tid}}/?f={{floorCopy}}&rn={{rn}}">{{floor_padded}}</a>{{{qolHtml}}}{{{typeHtml}}}<span aria-hidden="true" class="lo">{{{floorPadding}}}|</span>
     </span>
     <br class="lo">
 {{/staticFloors}}
 {{#floorDown}}
 <span class="bb">
-    <span aria-hidden="true" class="lo">|</span><a href="/?l={{end}}&rn={{rn}}"><span aria-hidden="true" class="lo">v{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}v</span></a><span aria-hidden="true" class="lo">|</span>
+    <span aria-hidden="true" class="lo">|</span><a href="/{{tid}}/?l={{end}}&rn={{rn}}"><span aria-hidden="true" class="lo">v{{{begPad}}}</span> Floors {{beg}}-{{end}} <span aria-hidden="true" class="lo">{{{endPad}}}v</span></a><span aria-hidden="true" class="lo">|</span>
 </span>
 {{/floorDown}}
 {{^floorDown}}

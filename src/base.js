@@ -1,4 +1,4 @@
-/*global t,l*/
+/*global t,l, tid*/
 window.onload = function() {
 	var fc = function() {
 		var floors = document.querySelectorAll('.f');
@@ -146,7 +146,7 @@ window.onload = function() {
 	var gt = function(path) {
 		var mt = document.getElementById('af').getBoundingClientRect().top;
 		var xhr = new XMLHttpRequest();
-		xhr.open('GET', path);
+		xhr.open('GET', '/'+tid+path);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 		xhr.onload = function() {
 			var data;
