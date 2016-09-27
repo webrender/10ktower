@@ -323,7 +323,7 @@ var tick = function(req, res, skip) {
 		var fc = {};
 		for (var i=0; i<tower.floors.length; i++) {
 			if (!fc[tower.floors[i].type])
-				fc[tower.floors[i].type] = 0;
+				fc[tower.floors[i].type] = 1;
 			fc[tower.floors[i].type]++;
 		}
 		// console.log(fc);
@@ -480,7 +480,7 @@ var tick = function(req, res, skip) {
 						qolScore--;
 						qolComments.push('Not enough patrons.');
 					}
-					if((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre > 12) {
+					if((fc.Condo + fc.Hotel + fc.Office) / fc.Theatre > 12 && population(tower) >= 1000) {
 						qolScore++;
 						qolComments.push('Plenty of business!');
 					}
@@ -521,6 +521,12 @@ var tick = function(req, res, skip) {
 			// hotel - daily
 			if (tower.floors[i].tenants) {
 				switch(tower.floors[i].type) {
+				case 'Restaurant':
+				case 'Shop':
+				case 'Theatre':
+					if (tower.floors[i].tenants)
+						delete tower.floors[i].tenants;
+					break;
 				case 'Condo':
 					switch (tower.floors[i].tenants.qol) {
 					case 'Bad':
@@ -566,12 +572,12 @@ var tick = function(req, res, skip) {
 				case 'Hotel':
 					switch (tower.floors[i].tenants.qol) {
 					case 'Bad':
-						if (tower.floors[i].tenants.occupied && t_daytime && r75()) {
+						if (tower.floors[i].tenants.occupied && t_nighttime && r75()) {
 							tower.floors[i].tenants.occupied = false;
 						}
 						break;
 					case 'Neutral':
-						if (t_daytime) {
+						if (t_nighttime) {
 							if (r75()) {
 								tower.floors[i].tenants.occupied = true;
 							} else {
@@ -580,7 +586,7 @@ var tick = function(req, res, skip) {
 						}
 						break;
 					case 'Good':
-						if (!tower.floors[i].tenants.occupied && t_daytime) {
+						if (!tower.floors[i].tenants.occupied && t_nighttime) {
 							tower.floors[i].tenants.occupied = true;
 						}
 						break;
@@ -700,17 +706,14 @@ var level = function(req, res) {
 						break;
 					case 'r':
 						type = 'Restaurant';
-						tenants = true;
 						cost = 100000;
 						break;
 					case 's':
 						type = 'Shop';
-						tenants = true;
 						cost = 100000;
 						break;
 					case 't':
 						type = 'Theatre';
-						tenants = true;
 						cost = 500000;
 						break;
 					}
