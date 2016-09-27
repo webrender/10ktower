@@ -1,5 +1,5 @@
 /*global t,l, tid*/
-window.onload = function() {
+document.addEventListener("DOMContentLoaded", function(event) {
 	var fc = function() {
 		var floors = document.querySelectorAll('.f');
 		for (var i = 0; i < floors.length; i++) {
