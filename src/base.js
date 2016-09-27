@@ -125,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 				clearInterval(iv);
 			} else if (current > int) {
 				if (current - int > 10000)
-					current -= (current-int);
+					current -= (current-int-1111);
 				else if (current - int > 1000)
 					current -= 1000;
 				else if (current - int > 100)
@@ -135,8 +135,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
 				else
 					current--;
 			} else if (current < int) {
-				if (current + int  > 10000)
-					current += (int-current);
+				if (int - current > 10000)
+					current += (int-current-1111);
 				else if (int - current > 1000)
 					current += 1000;
 				else if (int - current > 100)
