@@ -235,7 +235,7 @@ var population = function(tower) {
 
 // Revenue Model
 var rev = function(tower, idx) {
-	if (idx){
+	if (idx >= 0){
 		switch(tower.floors[idx].type) {
 		case 'Condo':
 			if (tower.floors[idx].tenants.occupied) {
