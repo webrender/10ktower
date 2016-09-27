@@ -144,7 +144,6 @@ window.onload = function() {
 		}, 30);
 	};
 	var gt = function(path) {
-		var mt = document.getElementById('af').getBoundingClientRect().top;
 		var xhr = new XMLHttpRequest();
 		xhr.open('GET', '/'+tid+path);
 		xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
@@ -158,9 +157,9 @@ window.onload = function() {
 				cn(document.getElementById('zp'), data.pop);
 				cn(document.getElementById('zc'), data.cash);
 				// Update tower
-				document.getElementById('t').style.justifyContent = 'flex-start';
-				document.getElementById('t').style.marginTop = (mt + document.body.scrollTop) + 'px';
 				document.getElementById('t').innerHTML = data.tower;
+				console.log(document.getElementById('t').clientHeight);
+				flexCheck(document.getElementById('t'));
 				if (l) {
 					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
 					l = false; //eslint-disable-line no-native-reassign
@@ -179,6 +178,17 @@ window.onload = function() {
 			}
 		};
 		xhr.send();
+	};
+
+	var flexCheck = function(e) {
+		var mt = document.getElementById('af').getBoundingClientRect().top;
+		if (window.innerHeight - 101 < e.clientHeight) {
+			e.style.justifyContent = 'flex-start';
+			e.style.marginTop = (mt + document.body.scrollTop) + 'px';
+		} else {
+			e.style.justifyContent = 'flex-end';
+			e.style.marginTop = '100px';
+		}
 	};
 
 	gt('/');
