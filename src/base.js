@@ -1,5 +1,5 @@
 /*global t,l, tid*/
-document.addEventListener("DOMContentLoaded", function(event) {
+document.addEventListener('DOMContentLoaded', function(event) {
 	var fc = function() {
 		var floors = document.querySelectorAll('.f');
 		for (var i = 0; i < floors.length; i++) {
@@ -124,7 +124,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 			if (current == int) {
 				clearInterval(iv);
 			} else if (current > int) {
-				if (current - int > 1000)
+				if (current - int > 10000)
+					current -= (current-int);
+				else if (current - int > 1000)
 					current -= 1000;
 				else if (current - int > 100)
 					current -= 100;
@@ -133,7 +135,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 				else
 					current--;
 			} else if (current < int) {
-				if (int - current > 1000)
+				if (current + int  > 10000)
+					current += (int-current);
+				else if (int - current > 1000)
 					current += 1000;
 				else if (int - current > 100)
 					current += 100;
