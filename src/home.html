@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="index.css?__inline=true" rel="stylesheet" />
+<link href="home.css?__inline=true" rel="stylesheet" />
+<style>
+body {background-position: 0 -250vh;}
+</style>
+</head>
+<body>
+<center class="centered sb">
+    <span>10kTower: A 10k Apart Project</span>
+</center>
+<hr>
+<center class="centered">
+<span class="mb">
+    <a class="h" href="/new/"><span class="f">New City</span></a>
+    <br class="lo">
+    <a class="h" href="/about/"><span class="f">About</span></a>
+    {{#tid}}
+    <br class="lo">
+    <a class="h" href="/{{tid}}/"><span class="f">Load Last Tower</span></a>
+    {{/tid}}
+</span>
+</center>
+</body>

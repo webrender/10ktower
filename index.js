@@ -2,6 +2,8 @@ var express = require('express');
 var compression = require('compression');
 var mustacheExpress = require('mustache-express');
 var fs = require('fs');
+var shortid = require('shortid');
+var cookieParser = require('cookie-parser');
 
 //  /$$$$$$$                        /$$     /$$
 // | $$__  $$                      | $$    |__/
@@ -18,6 +20,7 @@ var fs = require('fs');
 var app = express();
 
 app.use(compression());
+app.use(cookieParser());
 app.use(express.static('dist'));
 
 app.engine('mustache', mustacheExpress());
@@ -25,8 +28,20 @@ app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views','./dist');
 
+app.get('/', function(req,res){
+	console.log(req.cookies);
+	res.render('home', {tid: req.cookies.last_tower});
+});
+
+app.get('/new/', function(req, res) {
+	var tid = shortid.generate();
+	fs.writeFile('towers/'+tid+'.json', JSON.stringify({'ticks':0,'cash':100000,'floors':[]}), 'utf8', function() {
+		res.redirect('/'+tid+'/');
+	});
+});
+
 app.get('/:towerid/', function (req, res) {
-	fs.readFile(req.params.towerid+'.json', 'utf8', function(err) {
+	fs.readFile('towers/'+req.params.towerid+'.json', 'utf8', function(err) {
 		if (err) {
 			res.status(404).send('404: Tower Not Found');
 			return false;
@@ -103,8 +118,6 @@ var com = function(tower, i) {
 };
 
 var r75 = function() { return Math.ceil(Math.random() * 100) < 75 ? true : false; };
-// var r50 = function() { return Math.ceil(Math.random() * 100) < 50 ? true : false; };
-// var r25 = function() { return Math.ceil(Math.random() * 100) < 25 ? true : false; };
 
 //   /$$$$$$$
 //  | $$__  $$
@@ -301,7 +314,7 @@ var tick = function(req, res, skip) {
 	// - based on QoL, move tehants in/out
 	// - if its the end of the day/quarter assess rent/income
 	// - either redirect to the index, or return JSON if it's an XHR
-	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
+	fs.readFile('towers/'+req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		// lets count all our floors for calcs in the next loop
 		var fc = {};
@@ -559,7 +572,7 @@ var tick = function(req, res, skip) {
 			tower.ticks += 1000*60*60*12;
 		}
 		// write the tower back to json
-		fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
+		fs.writeFile('towers/'+req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 			index(req, res);
 		});
 	});
@@ -575,7 +588,7 @@ var tick = function(req, res, skip) {
 // |________/ \_______/    \_/    \_______/|__/
 
 var level = function(req, res) {
-	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
+	fs.readFile('towers/'+req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		var msg = '';
 		if (req.query.f > tower.floors.length) {
@@ -583,7 +596,7 @@ var level = function(req, res) {
 			if (tower.cash >= 500) {
 				tower.cash = tower.cash - 500;
 				tower.floors.push({});
-				fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
+				fs.writeFile('towers/'+req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 					index(req, res);
 				});
 			} else {
@@ -600,7 +613,7 @@ var level = function(req, res) {
 						if (tower.cash > 80000) {
 							tower.cash = tower.cash - 80000;
 							tower.floors[idx] = {};
-							fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
+							fs.writeFile('towers/'+req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 								tick(req, res, true);
 							});
 						} else {
@@ -610,7 +623,7 @@ var level = function(req, res) {
 						}
 					} else {
 						tower.floors[idx] = {};
-						fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
+						fs.writeFile('towers/'+req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 							tick(req, res, true);
 						});
 					}
@@ -686,7 +699,7 @@ var level = function(req, res) {
 					}
 					if (tower.cash >= cost) {
 						tower.cash = tower.cash - cost;
-						fs.writeFile(req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
+						fs.writeFile('towers/'+req.params.towerid+'.json', JSON.stringify(tower), 'utf8', function() {
 							tick(req, res, true);
 						});
 					} else {
@@ -723,7 +736,7 @@ var index = function(req, res, error) {
 			return false;
 		}
 	}
-	fs.readFile(req.params.towerid+'.json', 'utf8', function(err, data) {
+	fs.readFile('towers/'+req.params.towerid+'.json', 'utf8', function(err, data) {
 		var tower = JSON.parse(data);
 		tower.floors = tower.floors.reverse();
 		tower.height = tower.floors.length + 1;

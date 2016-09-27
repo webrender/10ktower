@@ -26,6 +26,7 @@ module.exports = function(grunt) {
             'dist/floor.html': 'src/floor.html',
             'dist/tower.html': 'src/tower.html',
             'dist/error.html': 'src/error.html',
+            'dist/home.html': 'src/home.html',
         }
       }
     },
@@ -45,7 +46,8 @@ module.exports = function(grunt) {
                 'dist/index.css':'src/index.less',
                 'dist/picker.css':'src/picker.less',
                 'dist/floor.css':'src/floor.less',
-                'dist/base.css':'src/base.less'
+                'dist/base.css':'src/base.less',
+                'dist/home.css':'src/home.less',
             }
         }
     },
@@ -60,6 +62,7 @@ module.exports = function(grunt) {
                 'dist/picker.css': 'dist/picker.css',
                 'dist/floor.css': 'dist/floor.css',
                 'dist/base.css': 'dist/base.css',
+                'dist/home.css': 'dist/home.css',
             }
         }
     },
@@ -86,6 +89,10 @@ module.exports = function(grunt) {
         error: {
             src: 'dist/error.html',
             dest: 'dist/error.html'
+        },
+        home: {
+            src: 'dist/home.html',
+            dest: 'dist/home.html'
         }
     },
     watch: {
@@ -119,6 +126,7 @@ module.exports = function(grunt) {
           {src: 'dist/floor.html', dest: 'dist/floor.mustache'},
           {src: 'dist/tower.html', dest: 'dist/tower.mustache'},
           {src: 'dist/error.html', dest: 'dist/error.mustache'},
+          {src: 'dist/home.html', dest: 'dist/home.mustache'},
         ]
       }
     }

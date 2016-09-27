@@ -116,8 +116,8 @@ window.onload = function() {
 		}
 	};
 	var cn = function(el, int) {
-		var current = parseInt(el.innerHTML.replace(',',''));
-		int = (typeof int == 'string' ? parseInt(int.replace(',','')) : int);
+		var current = parseInt(el.innerHTML.replace(/,/g,''));
+		int = (typeof int == 'string' ? parseInt(int.replace(/,/g,'')) : int);
 		var iv = setInterval(function(){
 			if (current == int) {
 				clearInterval(iv);
@@ -183,4 +183,11 @@ window.onload = function() {
 
 	gt('/');
 	ssp(100);
+
+	var the_date = new Date();
+	var unix_time = the_date.getTime();
+	var expiration = unix_time + 2.592e6;
+	the_date.setTime( expiration );
+	document.cookie = 'last_tower='+tid+'; expires=' + the_date.toGMTString();
+
 };
