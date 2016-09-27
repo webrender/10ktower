@@ -168,6 +168,8 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
+				if (!tower.floors[idx].tenants.qol)
+					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 50;
@@ -182,6 +184,8 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
+				if (!tower.floors[idx].tenants.qol)
+					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 50;
@@ -196,6 +200,8 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
+				if (!tower.floors[idx].tenants.qol)
+					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 120;
