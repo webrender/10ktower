@@ -192,4 +192,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
 	gt('/');
 	ssp(100);
-};
+});
