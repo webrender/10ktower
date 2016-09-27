@@ -34,7 +34,7 @@ app.get('/', function(req,res){
 
 app.get('/new/', function(req, res) {
 	var tid = shortid.generate();
-	fs.writeFile('towers/'+tid+'.json', JSON.stringify({'ticks':0,'cash':100000,'floors':[]}), 'utf8', function() {
+	fs.writeFile('towers/'+tid+'.json', JSON.stringify({'ticks':0,'cash':200000,'floors':[]}), 'utf8', function() {
 		res.redirect('/'+tid+'/');
 	});
 });
@@ -520,52 +520,72 @@ var tick = function(req, res, skip) {
 			// condo, office - quarterly
 			// hotel - daily
 			if (tower.floors[i].tenants) {
-				if (tower.floors[i].tenants.qol == 'Bad') {
-					if (tower.floors[i].tenants.occupied && (
-						(
-							t_quarter && (
-								tower.floors[i].type == 'Condo' ||
-								tower.floors[i].type == 'Office'
-							)
-						) || (
-							t_daytime && (
-								tower.floors[i].type == 'Hotel'
-							)
-						)
-					) && r75()) {
-						tower.floors[i].tenants.occupied = false;
-					}
-				} else if (tower.floors[i].tenants.qol == 'Neutral') {
-					if (!tower.floors[i].tenants.occupied &&
-						t_quarter &&
-						(
-							tower.floors[i].type == 'Condo' ||
-							tower.floors[i].type == 'Office'
-						)
-					) {
-						tower.floors[i].tenants.occupied = true;
-					} else if (t_daytime && tower.floors[i].type == 'Hotel') {
-						if (r75()) {
+				switch(tower.floors[i].type) {
+				case 'Condo':
+					switch (tower.floors[i].tenants.qol) {
+					case 'Bad':
+						if (tower.floors[i].tenants.occupied && t_quarter && r75()) {
+							tower.floors[i].tenants.occupied = false;
+							revenue -= 100000;
+						}
+						break;
+					case 'Neutral':
+						if (!tower.floors[i].tenants.occupied && t_quarter && r75()) {
 							tower.floors[i].tenants.occupied = true;
-						} else {
+							revenue += 100000;
+
+						}
+						break;
+					case 'Good':
+						if (!tower.floors[i].tenants.occupied && t_quarter) {
+							tower.floors[i].tenants.occupied = true;
+							revenue += 100000;
+						}
+						break;
+					}
+					break;
+				case 'Office':
+					switch (tower.floors[i].tenants.qol) {
+					case 'Bad':
+						if (tower.floors[i].tenants.occupied && t_quarter && r75()) {
 							tower.floors[i].tenants.occupied = false;
 						}
+						break;
+					case 'Neutral':
+						if (!tower.floors[i].tenants.occupied && t_quarter && r75()) {
+							tower.floors[i].tenants.occupied = true;
+						}
+						break;
+					case 'Good':
+						if (!tower.floors[i].tenants.occupied && t_quarter) {
+							tower.floors[i].tenants.occupied = true;
+						}
+						break;
 					}
-				} else { // qol = good
-					if (!tower.floors[i].tenants.occupied && (
-						(
-							t_quarter && (
-								tower.floors[i].type == 'Condo' ||
-								tower.floors[i].type == 'Office'
-							)
-						) || (
-							t_daytime && (
-								tower.floors[i].type == 'Hotel'
-							)
-						)
-					)) {
-						tower.floors[i].tenants.occupied = true;
+					break;
+				case 'Hotel':
+					switch (tower.floors[i].tenants.qol) {
+					case 'Bad':
+						if (tower.floors[i].tenants.occupied && t_daytime && r75()) {
+							tower.floors[i].tenants.occupied = false;
+						}
+						break;
+					case 'Neutral':
+						if (t_daytime) {
+							if (r75()) {
+								tower.floors[i].tenants.occupied = true;
+							} else {
+								tower.floors[i].tenants.occupied = false;
+							}
+						}
+						break;
+					case 'Good':
+						if (!tower.floors[i].tenants.occupied && t_daytime) {
+							tower.floors[i].tenants.occupied = true;
+						}
+						break;
 					}
+					break;
 				}
 			}
 		}
