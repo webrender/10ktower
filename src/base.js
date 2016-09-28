@@ -7,13 +7,16 @@ document.addEventListener('DOMContentLoaded', function() {
 				floors[i].onclick = function(event) {
 					event.preventDefault();
 					var xhr = new XMLHttpRequest();
-					xhr.open('GET', this.querySelectorAll('a')[0].href);
+					var url = this.querySelectorAll('a')[0].href;
+					xhr.open('GET', url);
 					xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 					xhr.onload = function() {
 						if (xhr.status === 200) {
+							var res = JSON.parse(xhr.responseText);
 							var modal = document.createElement('div');
 							modal.id = 'm';
-							modal.innerHTML = xhr.responseText;
+							modal.style['width'] = res.width;
+							modal.innerHTML = res.html;
 							var modalbg = document.createElement('div');
 							modalbg.id = 'mb';
 							modalbg.onclick = function() {
@@ -166,6 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				document.getElementById('t').innerHTML = data.tower;
 				flexCheck(document.getElementById('t'));
 				if (l) {
+					console.log(l+1);
 					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
 					l = false; //eslint-disable-line no-native-reassign
 				}
@@ -175,10 +179,11 @@ document.addEventListener('DOMContentLoaded', function() {
 				var ed = document.createElement('div');
 				ed.id = 'e';
 				ed.innerHTML = data;
+				ed.style.top = document.getElementById('sb').offsetHeight + 'px';
 				document.body.appendChild(ed);
 				setTimeout(function() {
 					ed.remove();
-				}, 1000);
+				}, 2000);
 
 			}
 		};

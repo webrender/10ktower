@@ -304,10 +304,10 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Housekeeping':
-			return {'quarter':true, amount: -10000};
+			return {'quarter':true, amount: -100000};
 		case 'Security':
 		case 'Medical':
-			return {'quarter':true, amount: -20000};
+			return {'quarter':true, amount: -200000};
 		}
 	}
 	return false;
@@ -326,7 +326,7 @@ var tick = function(req, res, skip) {
 	// tick eval goes here
 	// - first do a QoL check on all the floors
 	// - write the QoL output & comments to JSON
-	// - based on QoL, move tehants in/out
+	// - based on QoL, move tenants in/out
 	// - if its the end of the day/quarter assess rent/income
 	// - either redirect to the index, or return JSON if it's an XHR
 	fs.readFile('towers/'+req.params.towerid+'.json', 'utf8', function(err, data) {
@@ -680,7 +680,18 @@ var level = function(req, res) {
 							tower.floors[idx].tenants.occupied == true ?
 							true :
 							false;
-					res.render('floor', floor);
+					if (req.xhr) {
+						// ajax request, return HTML blocks
+						res.render('floor', floor, function(e,html) {
+							res.json({
+								width: '300px',
+								html: html
+							});
+						});
+					} else {
+						// generate index
+						res.render('floor', floor);
+					}
 				}
 			} else {
 				//empty floor
@@ -749,7 +760,23 @@ var level = function(req, res) {
 					}
 				} else {
 					// picker
-					res.render('picker',{floor: idx+1, xhr: req.xhr, tid: req.params.towerid});
+					var pData = {
+						floor: idx+1,
+						xhr: req.xhr,
+						tid: req.params.towerid
+					};
+					if (req.xhr) {
+						// ajax request, return HTML blocks
+						res.render('picker', pData, function(e,html) {
+							res.json({
+								width: '620px',
+								html: html
+							});
+						});
+					} else {
+						// generate index
+						res.render('picker', pData);
+					}
 				}
 			}
 		}
@@ -785,9 +812,9 @@ var index = function(req, res, error) {
 		var tickDate = new Date(tower.ticks);
 		tower.time = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? 'Nighttime' : 'Daytime';
 		tower.backgroundPosition = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? '0' : '-550vh;';
-		tower.day = Math.floor(tickDate/8.64e7);
-		tower.quarter = Math.floor(tower.day/90) + 1;
-		tower.year = Math.floor(tower.day/360) + 1;
+		tower.day = Math.floor((tickDate/8.64e7) % 90);
+		tower.quarter = Math.floor((tickDate/8.64e7)/90) + 1;
+		tower.year = Math.floor((tickDate/8.64e7)/360)  + 1;
 		tower.dateString = tower.time + ', ' + 'D' + tower.day + '/Q' + tower.quarter + '/Y' + tower.year;
 		tower.l = req.query.l ? req.query.l : tower.floors.length;
 		tower.lp = req.query.l ? req.query.l : false;

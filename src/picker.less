@@ -1,4 +1,13 @@
+.pi {
+    display: block;
+    width: 620px;
+    margin: 0 auto;
+}
+
 .mb {
+
+    position: relative;
+
     .f {
         display: block;
         width: 300px;
@@ -14,15 +23,15 @@
         line-height: 43px;
     }
     .fd {
-        position: fixed;
+        position: absolute;
         left: 310px;
-        top: 50px;
+        top: 5px;
         width: 300px;
-        line-height: 16px;
-        background: white;
-        font-size: 14px;
+        line-height: 18px;
+        font-size: 16px;
         height: 383px;
         display: none;
+        color: black;
 
         li {
             font-size: 14px;
@@ -32,5 +41,21 @@
     }
     .f:hover .fd {
         display: block;
+    }
+    .f:first-child:after {
+        position: absolute;
+        top: 5px;
+        left: 310px;
+        width: 300px;
+        content: 'Hover over a unit type for more information.';
+        font-size: 16px;
+        line-height: 18px;
+        color: black;
+    }
+
+    &:hover {
+        .f:first-child:after {
+            display: none;
+        }
     }
 }

@@ -112,7 +112,7 @@ module.exports = function(grunt) {
         }
       },
       server: {
-        files: ['index.js'],
+        files: ['server.js'],
         tasks: ['express:main'],
         options: {
           spawn: false
@@ -122,7 +122,7 @@ module.exports = function(grunt) {
     express: {
         main: {
             options: {
-                script: 'index.js'
+                script: 'server.js'
             }
         }
     },

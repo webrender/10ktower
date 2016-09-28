@@ -11,25 +11,25 @@ body {
     color: white;
 }
 tt {
-    color: fuchsia;
+    color: #8e0090;
 }
 a {
     color: inherit;
 }
 i {
     font-style: normal;
-    color: blue;
+    color: #0000EC;
 }
 b {
     font-weight: normal;
-    color: #990000;
+    color: #460000;
 }
 strong {
     font-weight: normal;
-    color: red;
+    color: #A00000;
 }
 code {
-    color: teal;
+    color: #007878;
 }
 hr {
     border-width: 1px 0 0 0;
@@ -45,7 +45,7 @@ center {
     display: flex;
     justify-content: flex-end;
 }
-.sb {
+#sb {
     justify-content: space-between;
     background: black;
     padding: 5px;
@@ -66,7 +66,7 @@ center.centered {
         background: #990000;
     }
 }
-.sb span, .sb a {
+#sb span, #sb a {
     padding: 5px;
 }
 .f, #af, .bb {
@@ -77,7 +77,6 @@ center.centered {
     line-height: 40px;
     width: 300px;
     max-width: 100%;
-    position: relative;
     text-align: left;
     cursor: pointer;
     color: black;
@@ -91,17 +90,7 @@ center.centered {
     min-width: 30px;
     text-align: center;
     text-decoration: none;
-    background: rgba(0,0,0,0.3);
-}
-.f:before {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right:0;
-    left: 0;
-    z-index:-1;
+    background: rgba(255,255,255,0.3);
 }
 .f img {
     position: relative;
@@ -118,89 +107,58 @@ center.centered {
 .f img.h:after { background-color: #50E3C2; }
 .f img.s:after { background-color: #EF5350; }
 .f img.n:after { background-color: #FFDD67; }
+
 // Hotel
 .f.-h {
-    background-color: #FFAAFF;
-}
-.f.-h:before {
-    background: url('../i.svg') ~"176px -869px/100px auto" no-repeat;
+    background: url('../i.svg') ~"176px -869px/100px auto" no-repeat #FFAAFF;
 }
 // Housekeeping
 .f.-m {
-    background-color: #AAAAFF;
-}
-.f.-m:before {
-    background: url('../i.svg') ~"184px -517px/100px auto" no-repeat;
+    background: url('../i.svg') ~"184px -517px/100px auto" no-repeat #AAAAFF;
 }
 // Security
 .f.-p {
-    background-color: #AAAAFF;
-}
-.f.-p:before {
-    background: url('../i.svg') ~"184px -1027px/100px auto" no-repeat;
+    background: url('../i.svg') ~"184px -1027px/100px auto" no-repeat #AAAAFF;
 }
 // Medical
 .f.-d {
-    background-color: #AAAAFF;
-}
-.f.-d:before {
-    background: url('../i.svg') ~"184px -602px/100px auto" no-repeat;
+    background: url('../i.svg') ~"184px -599px/100px auto" no-repeat #AAAAFF;
 }
 // Restaurant
 .f.-r {
-    background-color: #FFAAAA;
-}
-.f.-r:before {
-    background: url('../i.svg') ~"176px -691px/100px auto" no-repeat;
+    background: url('../i.svg') ~"200px -510px/75px auto" no-repeat #FFAAAA;
 }
 // Shop
 .f.-s {
-    background-color: #FFAAAA;
-}
-.f.-s:before {
-    background: url('../i.svg') ~"176px -742px/100px auto" no-repeat;
+    background: url('../i.svg') ~"176px -742px/100px auto" no-repeat #FFAAAA;
 }
 // Theatre
 .f.-t {
-    background-color: #FFAAAA;
-}
-.f.-t:before {
-    background: url('../i.svg') ~"176px -1246px/100px auto" no-repeat;
+    background: url('../i.svg') ~"176px -1246px/100px auto" no-repeat #FFAAAA;
 }
 // Condo
 .f.-c {
-    background-color: #a27b7b;
-}
-.f.-c:before {
-    background: url('../i.svg') ~"176px -944px/100px auto" no-repeat;
+    background: url('../i.svg') ~"188px -944px/100px auto" no-repeat #a27b7b;
 }
 // Office
 .f.-o {
-    background-color: #AAFFFF;
-}
-.f.-o:before {
-    background: url('../i.svg') ~"176px -1141px/100px auto" no-repeat;
+    background: url('../i.svg') ~"176px -1141px/100px auto" no-repeat #AAFFFF;
 }
 // Empty
 .f.-e {
-    background-color: #333333;
-}
-.f.-e:before, {
+    background-color: #666666;
     filter: grayscale(100%);
     -webkit-filter: grayscale(100%);
+
+    &:hover {
+        filter: none !important;
+        -webkit-filter: none !important;
+    }
 }
 // Lobby
 .f.-l {
     background-color: #dddd88;
-    color: #888811;
-}
-.f:before {
-    opacity: 0.3;
-    background-color: #FFFFFF !important;
-}
-.f:hover:before {
-    opacity: 0.8;
-    background-color: transparent !important;
+    color: #62620F;
 }
 
 .mb {
