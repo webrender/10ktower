@@ -373,7 +373,7 @@ var tick = function(req, res, skip) {
 						qolScore--;
 						qolComments.push('There\'s nothing to do!');
 					}
-					if ((fc.Condo + fc.Hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) < 3) {
+					if ((fc.Restaurant + fc.Shop + fc.Theatre) > 3 && ((fc.Condo + fc.Hotel) / (fc.Restaurant + fc.Shop + fc.Theatre) < 3)) {
 						qolScore++;
 						qolComments.push('There\'s lots of activities!');
 					}
@@ -442,7 +442,7 @@ var tick = function(req, res, skip) {
 						qolComments.push('It\'s too noisy.');
 					}
 					// needs enough commerical properties
-					if ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3 && r75()) {
+					if ((fc.Restaurant + fc.Shop + fc.Theatre) > 3 && ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3) && r75()) {
 						qolScore--;
 						qolComments.push('There\'s not enough to do in this Tower.');
 					}
