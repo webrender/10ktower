@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	var cn = function(el, inc) {
 		var current = parseInt(el.innerHTML.replace(/,/g,''));
 		inc = (typeof inc == 'string' ? parseInt(inc.replace(/,/g,'')) : inc);
+		console.log(inc - current);
 		// current = current amount, inc = amount to increment
 		var iv = setInterval(function(){
 			if (current == inc) {
@@ -132,7 +133,6 @@ document.addEventListener('DOMContentLoaded', function() {
 			} else if (current < inc) {
 				current += Math.pow(10,Math.floor(Math.log(inc - current) / Math.LN10 + 0.000000001));
 			}
-			console.log(current);
 			el.innerHTML = current.toLocaleString('en-US');
 		}, 30);
 	};
@@ -153,7 +153,6 @@ document.addEventListener('DOMContentLoaded', function() {
 				document.getElementById('t').innerHTML = data.tower;
 				flexCheck(document.getElementById('t'));
 				if (l) {
-					console.log(l+1);
 					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
 					l = false; //eslint-disable-line no-native-reassign
 				}
