@@ -425,7 +425,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('These rooms are filthy!');
 					}
-					if (fc.hotel / fc.Housekeeping < 6) {
+					if (fc.Hotel / fc.Housekeeping < 6) {
 						qolScore ++;
 						qolComments.push('Clean rooms!');
 					}
