@@ -1,4 +1,5 @@
 /*global t,l, tid*/
+var ls = 100;
 document.addEventListener('DOMContentLoaded', function() {
 	var fc = function() {
 		var floors = document.querySelectorAll('.f');
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
 							var modalbg = document.createElement('div');
 							modalbg.id = 'mb';
 							modalbg.onclick = function() {
-								ssp(100);
+								ssp(ls);
 								modal.remove();
 								modalbg.remove();
 							};
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 									var u = this.getAttribute('u');
 									if (f && u) {
 										gt('/?f='+f+'&u='+u);
-										ssp(100);
+										ssp(ls);
 										modal.remove();
 										modalbg.remove();
 									}
@@ -72,7 +73,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			s = 15;
 			break;
 		}
-		ssp(s);
+		ls = s;
+		ssp(ls);
 	};
 
 	var d = new Date(t);
@@ -184,5 +186,5 @@ document.addEventListener('DOMContentLoaded', function() {
 	};
 
 	gt('/');
-	ssp(100);
+	ssp(ls);
 });
