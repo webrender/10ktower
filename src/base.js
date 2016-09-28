@@ -120,35 +120,19 @@ document.addEventListener('DOMContentLoaded', function() {
 			}, s);
 		}
 	};
-	var cn = function(el, int) {
+	var cn = function(el, inc) {
 		var current = parseInt(el.innerHTML.replace(/,/g,''));
-		int = (typeof int == 'string' ? parseInt(int.replace(/,/g,'')) : int);
+		inc = (typeof inc == 'string' ? parseInt(inc.replace(/,/g,'')) : inc);
+		// current = current amount, inc = amount to increment
 		var iv = setInterval(function(){
-			if (current == int) {
+			if (current == inc) {
 				clearInterval(iv);
-			} else if (current > int) {
-				if (current - int > 10000)
-					current -= (current-int-1111);
-				else if (current - int > 1000)
-					current -= 1000;
-				else if (current - int > 100)
-					current -= 100;
-				else if (current - int > 10)
-					current -= 10;
-				else
-					current--;
-			} else if (current < int) {
-				if (int - current > 10000)
-					current += (int-current-1111);
-				else if (int - current > 1000)
-					current += 1000;
-				else if (int - current > 100)
-					current += 100;
-				else if (int - current > 10)
-					current += 10;
-				else
-					current++;
+			} else if (current > inc) {
+				current -= Math.pow(10,Math.floor(Math.log(current - inc) / Math.LN10 + 0.000000001));
+			} else if (current < inc) {
+				current += Math.pow(10,Math.floor(Math.log(inc - current) / Math.LN10 + 0.000000001));
 			}
+			console.log(current);
 			el.innerHTML = current.toLocaleString('en-US');
 		}, 30);
 	};
