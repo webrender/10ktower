@@ -1,6 +1,7 @@
 .pi {
     display: block;
     width: 620px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -13,6 +14,11 @@
         width: 300px;
         max-width: 100%;
         text-align: left;
+
+        @media only screen and (max-width : 480px) {
+            width: 100%;
+        }
+
     }
     .f:last-child {
         border-bottom: 1px solid black;
@@ -41,6 +47,9 @@
     }
     .f:hover .fd, .f:focus .fd {
         display: block;
+        @media only screen and (max-width : 480px) {
+            display: none;
+        }
     }
     .f:first-child:after {
         position: absolute;
@@ -51,6 +60,11 @@
         font-size: 16px;
         line-height: 18px;
         color: black;
+    }
+    @media only screen and (max-width : 480px) {
+        .f:first-child:after {
+            display: none;
+        }
     }
 
     &:hover, &:focus {

@@ -104,6 +104,11 @@ body:before {
     padding: 20px;
     z-index: 4;
     display: block;
+    max-width: calc(~'100%' - 60px);
+
+    @media only screen and (max-width : 480px) {
+        top: 260px;
+    }
 }
 
 #mb {

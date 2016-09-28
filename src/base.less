@@ -60,6 +60,9 @@ center.centered {
     &.-b {
         background: black;
         padding: 10px;
+        @media only screen and (max-width : 480px) {
+            width: calc(~'100%' - 18px);
+        }
     }
 
     &.-e {
