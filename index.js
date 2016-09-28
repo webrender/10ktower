@@ -168,7 +168,7 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
-				if (!tower.floors[idx].tenants.qol)
+				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
@@ -184,7 +184,7 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
-				if (!tower.floors[idx].tenants.qol)
+				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
@@ -200,7 +200,7 @@ var pop = function(tower, idx) {
 			if (t_nighttime(tower)) {
 				return 0;
 			} else {
-				if (!tower.floors[idx].tenants.qol)
+				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 					tower.floors[idx].tenants.qol = 'Neutral';
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
@@ -268,7 +268,7 @@ var rev = function(tower, idx) {
 			}
 			return {'daily':true, amount: 0};
 		case 'Restaurant':
-			if (!tower.floors[idx].tenants.qol)
+			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
@@ -280,7 +280,7 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Shop':
-			if (!tower.floors[idx].tenants.qol)
+			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
@@ -292,7 +292,7 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Theatre':
-			if (!tower.floors[idx].tenants.qol)
+			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
 				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
