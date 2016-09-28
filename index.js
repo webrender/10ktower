@@ -169,7 +169,7 @@ var pop = function(tower, idx) {
 				return 0;
 			} else {
 				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-					tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+					tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 50;
@@ -185,7 +185,7 @@ var pop = function(tower, idx) {
 				return 0;
 			} else {
 				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-					tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+					tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 50;
@@ -201,7 +201,7 @@ var pop = function(tower, idx) {
 				return 0;
 			} else {
 				if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-					tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+					tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 				switch(tower.floors[idx].tenants.qol){
 				case 'Good':
 					return 120;
@@ -269,7 +269,7 @@ var rev = function(tower, idx) {
 			return {'daily':true, amount: 0};
 		case 'Restaurant':
 			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-				tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+				tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 10000};
@@ -281,7 +281,7 @@ var rev = function(tower, idx) {
 			return 0;
 		case 'Shop':
 			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-				tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+				tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 20000};
@@ -293,7 +293,7 @@ var rev = function(tower, idx) {
 			return 0;
 		case 'Theatre':
 			if (!tower.floors[idx].tenants || !tower.floors[idx].tenants.qol)
-				tower.floors[idx].tenants.qol = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
+				tower.floors[idx].tenants = {'occupied':true, 'qol':'Neutral', 'qolComments': []};
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 40000};
