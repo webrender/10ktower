@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
 	var cn = function(el, inc) {
 		var current = parseInt(el.innerHTML.replace(/,/g,''));
 		inc = (typeof inc == 'string' ? parseInt(inc.replace(/,/g,'')) : inc);
-		console.log(inc - current);
 		// current = current amount, inc = amount to increment
 		var iv = setInterval(function(){
 			if (current == inc) {
