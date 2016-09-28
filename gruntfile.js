@@ -35,6 +35,7 @@ module.exports = function(grunt) {
       base: {
         files: {
           'dist/base.js': ['src/base.js'],
+          'dist/links.js': ['src/links.js'],
         }
       }
     },

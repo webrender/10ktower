@@ -14,7 +14,7 @@ body {background-position: 0 -250vh;}
 </center>
 <hr>
 <center class="centered">
-<span class="mb">
+<span class="mb" id="lx">
     <a class="h" href="/new/"><span class="f">New Tower</span></a>
     <br class="lo">
     <a class="h" href="/about/"><span class="f">About</span></a>
@@ -23,7 +23,13 @@ body {background-position: 0 -250vh;}
     <a class="h" href="/{{tid}}/"><span class="f">Load Last Tower</span></a>
     {{/tid}}
     <br>
-    <a href="http://webrender.net/lynx.gif" target="_blank">Works on Lynx!</a>
 </span>
+<script>
+    var a = document.createElement('a');
+    a.href = 'http://webrender.net/lynx.gif';
+    a.target = '_blank';
+    a.innerHTML = "Works in Lynx!"
+    document.getElementById('lx').appendChild(a);
+</script>
 </center>
 </body>
