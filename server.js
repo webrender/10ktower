@@ -382,7 +382,7 @@ var tick = function(req, res, skip) {
 						qolScore--;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length / fc.Security < 20) {
+					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe in my home.');
 					}
@@ -391,7 +391,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('It takes too long to see a doctor.');
 					}
-					if (tower.floors.length / fc.Medical < 40) {
+					if (tower.floors.length > 100 && (tower.floors.length / fc.Medical < 40)) {
 						qolScore++;
 						qolComments.push('This building has excellent medical care.');
 					}
@@ -420,7 +420,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length / fc.Security < 20) {
+					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -466,7 +466,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length / fc.Security < 20) {
+					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -486,7 +486,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length / fc.Security < 20) {
+					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -507,7 +507,7 @@ var tick = function(req, res, skip) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length / fc.Security < 20) {
+					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
