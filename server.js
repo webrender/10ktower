@@ -304,10 +304,10 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Housekeeping':
-			return {'quarter':true, amount: 0};
+			return {'quarter':true, amount: -10000};
 		case 'Security':
 		case 'Medical':
-			return {'quarter':true, amount: 0};
+			return {'quarter':true, amount: -20000};
 		}
 	}
 	return false;
