@@ -268,6 +268,8 @@ var rev = function(tower, idx) {
 			}
 			return {'daily':true, amount: 0};
 		case 'Restaurant':
+			if (!tower.floors[idx].tenants.qol)
+				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 10000};
@@ -278,6 +280,8 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Shop':
+			if (!tower.floors[idx].tenants.qol)
+				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 20000};
@@ -288,6 +292,8 @@ var rev = function(tower, idx) {
 			}
 			return 0;
 		case 'Theatre':
+			if (!tower.floors[idx].tenants.qol)
+				tower.floors[idx].tenants.qol = 'Neutral';
 			switch(tower.floors[idx].tenants.qol){
 			case 'Good':
 				return {'daily':true, amount: 40000};
