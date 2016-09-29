@@ -900,11 +900,11 @@ var index = function(req, res, error) {
 			if (this.tenants && this.tenants.qol) {
 				switch (this.tenants.qol) {
 				case 'Good':
-					return '<img src="../i.svg" class="h" alt=":)">';
+					return '<span aria-labelledby="happy" class="q h"> :) </span>';
 				case 'Bad':
-					return '<img src="../i.svg" class="s" alt=":(">';
+					return '<span aria-labelledby="sad" class="q s"> :( </span>';
 				case 'Neutral':
-					return '<img src="../i.svg" class="n" alt=":|">';
+					return '<span aria-labelledby="neutral" class="q n"> :| </span>';
 				}
 			} else {
 				return '<span class="sp"> &nbsp;&nbsp; </span>';
