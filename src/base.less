@@ -19,6 +19,8 @@ a {
 i {
     font-style: normal;
     color: #0000EC;
+    z-index: 3;
+    position: relative;
 }
 b {
     font-weight: normal;
@@ -83,6 +85,7 @@ center.centered {
     text-align: left;
     cursor: pointer;
     color: black;
+    position: relative;
 }
 .f a, .f .a {
     font-family: sans-serif;
@@ -110,52 +113,94 @@ center.centered {
 .f img.h:after { background-color: #50E3C2; }
 .f img.s:after { background-color: #EF5350; }
 .f img.n:after { background-color: #FFDD67; }
+.f .fb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
 
+    &:hover {
+        opacity: 1;
+    }
+
+}
 // Hotel
 .f.-h {
-    background: url('../i.svg') ~"176px -869px/100px auto" no-repeat #FFAAFF;
+    background: #FFAAFF;
+    .fb {
+        background: url('../i.svg') ~"176px -869px/100px auto" no-repeat;
+    }
 }
 // Housekeeping
 .f.-m {
-    background: url('../i.svg') ~"184px -517px/100px auto" no-repeat #AAAAFF;
+    background: #AAAAFF;
+    .fb {
+        background: url('../i.svg') ~"184px -517px/100px auto" no-repeat;
+    }
 }
 // Security
 .f.-p {
-    background: url('../i.svg') ~"184px -1027px/100px auto" no-repeat #AAAAFF;
+    background: #AAAAFF;
+    .fb {
+        background: url('../i.svg') ~"184px -1027px/100px auto" no-repeat;
+    }
 }
 // Medical
 .f.-d {
-    background: url('../i.svg') ~"184px -599px/100px auto" no-repeat #AAAAFF;
+    background: #AAAAFF;
+    .fb {
+        background: url('../i.svg') ~"184px -599px/100px auto" no-repeat;
+    }
 }
 // Restaurant
 .f.-r {
-    background: url('../i.svg') ~"200px -510px/75px auto" no-repeat #FFAAAA;
+    background: #FFAAAA;
+    .fb {
+        background: url('../i.svg') ~"200px -510px/75px auto" no-repeat;
+    }
 }
 // Shop
 .f.-s {
-    background: url('../i.svg') ~"176px -742px/100px auto" no-repeat #FFAAAA;
+    background: #FFAAAA;
+    .fb {
+        background: url('../i.svg') ~"176px -742px/100px auto" no-repeat;
+    }
 }
 // Theatre
 .f.-t {
-    background: url('../i.svg') ~"176px -1246px/100px auto" no-repeat #FFAAAA;
+    background: #FFAAAA;
+    .fb {
+        background: url('../i.svg') ~"176px -1246px/100px auto" no-repeat;
+    }
 }
 // Condo
 .f.-c {
-    background: url('../i.svg') ~"188px -944px/100px auto" no-repeat #a27b7b;
+    background: #a27b7b;
+    .fb {
+        background: url('../i.svg') ~"188px -944px/100px auto" no-repeat;
+    }
 }
 // Office
 .f.-o {
-    background: url('../i.svg') ~"176px -1141px/100px auto" no-repeat #AAFFFF;
+    background: #AAFFFF;
+    .fb {
+        background: url('../i.svg') ~"176px -1141px/100px auto" no-repeat;
+    }
 }
 // Empty
 .f.-e {
-    background-color: #666666;
-    filter: grayscale(100%);
-    -webkit-filter: grayscale(100%);
+    background: #666666;
 
-    &:hover, &:focus {
-        filter: none !important;
-        -webkit-filter: none !important;
+    .fb {
+        filter: grayscale(100%);
+        -webkit-filter: grayscale(100%);
+
+        &:hover, &:focus {
+            filter: none !important;
+            -webkit-filter: none !important;
+        }
     }
 }
 // Lobby
