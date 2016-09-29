@@ -136,7 +136,7 @@ var r75 = function() { return Math.ceil(Math.random() * 100) < 75 ? true : false
 
 // Population Model
 var pop = function(tower, idx) {
-	if (idx){
+	if (idx >= 0){
 		switch(tower.floors[idx].type) {
 		case 'Condo':
 			if (tower.floors[idx].tenants.occupied) {
