@@ -25,5 +25,4 @@ bower_components
 # Other
 npm-debug.log
 */settings/local.yaml
-dist/
 towers/

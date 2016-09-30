@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){var a=function(){for(var a=document.querySelectorAll(".f"),b=0;b<a.length;b++)b!=a.length-1&&(a[b].onclick=function(a){a.preventDefault(),window.location=this.querySelectorAll("a")[0].href})};a()});
