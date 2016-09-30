@@ -3,6 +3,7 @@
 body {
     background: #1E528E;
     background: linear-gradient(to bottom, #00000c,#191621,#20202c,#3a3a52,#515175,#8a76ab,#cd82a0,#eab0d1,#ebb2b1,#b1b5ea,#94dfff,#67d1fb,#38a3d1,#246fa8,#1e528e,#5b7983,#9da671,#e9ce5d,#b26339,#00000c);
+    background-size: 100% 1000%;
     background-size: 100% 1000vh;
     background-attachment: fixed;
 }
@@ -47,14 +48,23 @@ body:before {
     flex-direction: column;
     min-height: calc(~'100%' - 101px);
     align-items: center;
+    @media all and (-ms-high-contrast:none) {
+        height: 1px;
+    }
 }
 #nc {
-    width: 25px;
-    height: 25px;
+    width: 35px;
+    height: 35px;
     background: #666;
     padding: 0;
     position: relative;
     right: 9px;
+    display: block;
+
+    #cl {
+        width: 35px;
+        height: 35px;
+    }
 
     ul {
         position: absolute;
@@ -121,7 +131,7 @@ body:before {
     padding: 5px 5px;
 }
 .q {
-    display: block;
+    display: inline-block;
     width: 27px;
     height: 32px;
     line-height: 32px;

@@ -1,6 +1,16 @@
 /*global t,l, tid*/
 var ls = 100;
+
 document.addEventListener('DOMContentLoaded', function() {
+
+	if (!('remove' in Element.prototype)) {
+		Element.prototype.remove = function() {
+			if (this.parentNode) {
+				this.parentNode.removeChild(this);
+			}
+		};
+	}
+
 	var fc = function() {
 		var floors = document.querySelectorAll('.f');
 		for (var i = 0; i < floors.length; i++) {
@@ -58,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	fc();
 
 	document.getElementById('nt').setAttribute('id','nc');
-	document.getElementById('nc').innerHTML = '<svg id="cl" viewBox="0 0 100 100"><circle id="cf" cx="50" cy="50" r="45"/><g><rect id="ch" x="46" y="29" width="6" height="20"/><rect id="cm" x="48.5" y="12.5" width="3" height="40"/></g></svg><ul onclick="sp(event)"><li>||</li><li>></li><li>>></li><li>>>></li></ul>';
+	document.getElementById('nc').innerHTML = '<svg id="cl" viewBox="0 0 100 100"><circle id="cf" cx="50" cy="50" r="45"/><g><rect id="ch" x="46" y="29" width="8" height="20"/><rect id="cm" x="48.5" y="12.5" width="5" height="40"/></g></svg><ul onclick="sp(event)"><li>||</li><li>></li><li>>></li><li>>>></li></ul>';
 
 	window.sp = function(evt) {
 		var s = 100;
@@ -152,9 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				cn(document.getElementById('zc'), data.cash);
 				// Update tower
 				document.getElementById('t').innerHTML = data.tower;
-				flexCheck(document.getElementById('t'));
 				if (l) {
-					window.scrollTo(0, document.getElementById('f'+(l+1)).offsetTop);
+					window.scrollTo(0, document.getElementById('f'+(l)).offsetTop);
 					l = false; //eslint-disable-line no-native-reassign
 				}
 				fc();
@@ -174,17 +183,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		xhr.send();
 	};
 
-	var flexCheck = function(e) {
-		var mt = document.getElementById('af').getBoundingClientRect().top;
-		if (window.innerHeight - 101 < e.clientHeight) {
-			e.style.justifyContent = 'flex-start';
-			e.style.marginTop = (mt + document.body.scrollTop) + 'px';
-		} else {
-			e.style.justifyContent = 'flex-end';
-			e.style.marginTop = '100px';
-		}
-	};
-
 	gt('/');
 	ssp(ls);
-});
+}, false);
