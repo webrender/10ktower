@@ -2,10 +2,16 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 		copy: {
-			main: {
+			svgs: {
 				expand: true,
 				cwd: 'src',
 				src: '*.svg',
+				dest: 'dist/'
+			},
+			pngs: {
+				expand: true,
+				cwd: 'src',
+				src: '*.png',
 				dest: 'dist/'
 			},
 			vars: {
