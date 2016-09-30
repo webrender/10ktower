@@ -63,8 +63,8 @@ app.get('/:towerid/', function (req, res) {
 	});
 });
 
-app.listen(3000, function () {
-	console.log('10ktower listening on port 3000!'); //eslint-disable-line no-console
+app.listen(process.env.PORT, function () {
+	console.log('10ktower listening on port '+ process.env.PORT +'!'); //eslint-disable-line no-console
 });
 
 //   /$$   /$$           /$$
@@ -442,7 +442,7 @@ var tick = function(req, res, skip) {
 						qolComments.push('It\'s too noisy.');
 					}
 					// needs enough commerical properties
-					if ((fc.Restaurant + fc.Shop + fc.Theatre) > 3 && ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3) && r75()) {
+					if ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3 && r75()) {
 						qolScore--;
 						qolComments.push('There\'s not enough to do in this Tower.');
 					}

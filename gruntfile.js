@@ -170,5 +170,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-postcss');
 
   grunt.registerTask('server', ['copy', 'htmlmin', 'uglify', 'less', 'postcss', 'inline', 'rename', 'express', 'watch']);
+  grunt.registerTask('build', ['copy', 'htmlmin', 'uglify', 'less', 'postcss', 'inline', 'rename']);
 
 };
