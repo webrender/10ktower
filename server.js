@@ -828,6 +828,7 @@ var index = function(req, res, error) {
 		tower.lp = req.query.l ? req.query.l : false;
 		tower.rn = Math.ceil(Math.random() * 100);
 		tower.tid = req.params.towerid;
+		tower.operaMini = (req.headers['user-agent'].indexOf('Opera Mini') > -1);
 		if (req.query.l)
 			var l = req.query.l < 14 ? 14 : req.query.l;
 
