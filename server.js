@@ -19,7 +19,7 @@ var cookieParser = require('cookie-parser');
 
 var app = express();
 
-app.use(compression());
+app.use(compression({threshold:500, level:9}));
 app.use(cookieParser());
 app.use(express.static('dist'));
 
@@ -817,6 +817,7 @@ var index = function(req, res, error) {
 		tower.population = population(tower);
 		var tickDate = new Date(tower.ticks);
 		tower.time = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? 'Nighttime' : 'Daytime';
+		tower.stars = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? '' : 'dt';
 		tower.backgroundPosition = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? '0vh' : '-550vh;';
 		tower.backgroundPositionFb = (tickDate.getHours() < 6 || tickDate.getHours() > 18) ? '-100%' : '-600%;';
 		tower.day = Math.floor((tickDate/8.64e7) % 90);
@@ -891,24 +892,42 @@ var index = function(req, res, error) {
 				ret = '-t';
 				break;
 			}
-			if (this.tenants && this.tenants.occupied === false || !this.type ) {
-				ret += ' -e';
+			if (this.tenants && this.tenants.occupied === false) {
+				ret += ' -v';
+			}
+			if (!this.type) {
+				ret = '-e';
 			}
 			return ret;
 		};
 
-		tower.qolHtml = function() {
+		tower.qolClass = function() {
 			if (this.tenants && this.tenants.qol) {
 				switch (this.tenants.qol) {
 				case 'Good':
-					return '<span aria-label="happy" class="q h"><span aria-hidden="true"></span> :) </span>';
+					return 'qg';
 				case 'Bad':
-					return '<span aria-label="sad" class="q s"><span aria-hidden="true"></span> :( </span>';
+					return 'qb';
 				case 'Neutral':
-					return '<span aria-label="neutral" class="q n"><span aria-hidden="true"></span> :| </span>';
+					return 'qn';
 				}
 			} else {
-				return '<span class="sp" aria-hidden="true"> &nbsp;&nbsp; </span>';
+				return 'qe';
+			}
+		};
+
+		tower.qolText = function() {
+			if (this.tenants && this.tenants.qol) {
+				switch (this.tenants.qol) {
+				case 'Good':
+					return '<span aria-label="happy" class="lo"> :) </span>';
+				case 'Bad':
+					return '<span aria-label="sad" class="lo"> :( </span>';
+				case 'Neutral':
+					return '<span aria-label="neutral" class="lo"> :| </span>';
+				}
+			} else {
+				return '<span class="lo" aria-hidden="true"> &nbsp;&nbsp; </span>';
 			}
 		};
 
@@ -918,13 +937,17 @@ var index = function(req, res, error) {
 			} else {
 				switch (this.type) {
 				case 'Restaurant':
+					return '<strong>Diner</strong>';
 				case 'Shop':
+					return '<strong>Shop</strong>';
 				case 'Theatre':
-					return '<strong>'+this.type+'</strong>';
+					return '<strong>Theatre</strong>';
 				case 'Security':
+					return '<i>Security</i>';
 				case 'Medical':
+					return '<i>Medical</i>';
 				case 'Housekeeping':
-					return '<i>'+this.type+'</i>';
+					return '<i>Cleaners</i>';
 				case 'Condo':
 					return '<b>Condo</b>';
 				case 'Hotel':
@@ -932,13 +955,15 @@ var index = function(req, res, error) {
 				case 'Office':
 					return '<code>Office</code>';
 				default:
-					return 'Empty Floor';
+					return 'Empty';
 				}
 			}
 		};
 
 		tower.floorPadding = function() {
 			if (this.type) {
+				this.type = this.type == 'Restaurant' ? 'Diner' : this.type;
+				this.type = this.type == 'Housekeeping' ? 'Cleaners' : this.type;
 				var numSpaces = this.type.length ? 13 - this.type.length : 13;
 				var paddingStr = '';
 				for (var i=0; i<numSpaces; i++) {
@@ -946,7 +971,7 @@ var index = function(req, res, error) {
 				}
 				return paddingStr;
 			}
-			return '&nbsp;&nbsp;';
+			return '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
 		};
 
 		tower.floorDown = function () {
@@ -1008,6 +1033,10 @@ var index = function(req, res, error) {
 			return tower.cash.toLocaleString('en-US');
 		};
 
+		tower.cashClass = function() {
+			return tower.cash > 0 ? 'vp' : 'vn';
+		};
+
 		if (req.xhr) {
 			// ajax request, return HTML blocks
 			res.render('tower', tower, function(e,html) {
@@ -1015,7 +1044,9 @@ var index = function(req, res, error) {
 					pop: tower.population,
 					time: tower.dateString,
 					cash: tower.cashF(),
-					tower: html
+					height: tower.height,
+					stars: tower.stars,
+					tower: html,
 				});
 			});
 		} else {

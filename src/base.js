@@ -1,4 +1,4 @@
-/*global t,l, tid*/
+/*global t,l, tid, h*/
 var ls = 100;
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -160,6 +160,8 @@ document.addEventListener('DOMContentLoaded', function() {
 				// Update pop & cash
 				cn(document.getElementById('zp'), data.pop);
 				cn(document.getElementById('zc'), data.cash);
+				h = data.height;
+				document.body.className = data.stars;
 				// Update tower
 				document.getElementById('t').innerHTML = data.tower;
 				if (l) {
@@ -182,6 +184,33 @@ document.addEventListener('DOMContentLoaded', function() {
 		};
 		xhr.send();
 	};
+	var ef = 1;
+	var elevator = function() {
+		var p = ef;
+		if (ef == 1)
+			ef = Math.floor(Math.random() * (h - 1) + 1);
+		else
+			ef = 1;
+		var et = (ef - p > 0 ? ef - p : p - ef)*.25;
+		var ep = (ef-1)*41 + 1;
+		document.styleSheets[0].insertRule('.t:before {transition: bottom linear '+et+'s}',0);
+		setTimeout(function() {
+			document.styleSheets[0].insertRule('.t:before {bottom: '+ep+'px}',0);
+		}, 100);
+		setTimeout(elevator, (et+5)*1000);
+	};
+	elevator();
+
+	for (var i=1; i < 5; i++){
+		var c = document.createElement('div');
+		var s = document.createElement('div');
+		c.id = ('c'+i);
+		s.id = ('s'+i);
+		document.body.appendChild(c);
+		document.body.appendChild(s);
+	}
+
+
 
 	gt('/');
 	ssp(ls);

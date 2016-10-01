@@ -7,23 +7,23 @@
 
 .fd {
     position: absolute;
-    left: 310px;
+    left: 319px;
     top: 5px;
-    width: 300px;
+    width: 291px;
     line-height: 18px;
     font-size: 16px;
     height: 383px;
     display: none;
     color: black;
 
-    .-o & { top: -39px; }
-    .-h & { top: -83px; }
-    .-m & { top: -127px; }
-    .-p & { top: -171px; }
-    .-d & { top: -215px; }
-    .-r & { top: -259px; }
-    .-s & { top: -303px; }
-    .-t & { top: -347px; }
+    .-o & { top: -36px; }
+    .-h & { top: -77px; }
+    .-m & { top: -118px; }
+    .-p & { top: -159px; }
+    .-d & { top: -200px; }
+    .-r & { top: -241px; }
+    .-s & { top: -282px; }
+    .-t & { top: -323px; }
 
     li {
         font-size: 14px;
@@ -36,9 +36,16 @@
     position: relative;
     display: block;
 
+    .f.-hp {
+        background-color: rgba(255,255,255,0.5);
+    }
+    .n {
+        margin-left: -15px;
+    }
+
     .f {
         display: block;
-        width: 300px;
+        width: 309px;
         max-width: 100%;
         text-align: left;
 
@@ -51,11 +58,13 @@
         border-bottom: 1px solid black;
     }
     .f a {
+        font-size: 18px;
         margin-right:5px;
         display: inline-block;
-        line-height: 43px;
+        line-height: 40px;
         position: relative;
         z-index: 3;
+        min-width: 40px;
     }
     .f:hover .fd, .f:focus .fd {
         display: block;
@@ -66,8 +75,8 @@
     .f:first-child:after {
         position: absolute;
         top: 5px;
-        left: 310px;
-        width: 300px;
+        left: 319px;
+        width: 291px;
         content: 'Hover over a unit type for more information.';
         font-size: 16px;
         line-height: 18px;
@@ -83,5 +92,8 @@
         .f:first-child:after {
             display: none;
         }
+    }
+    .f .fb {
+        background-position-x: 140px;
     }
 }

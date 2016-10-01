@@ -14,7 +14,7 @@ body:before {
     bottom:0;
     height: 60px;
     width: 100%;
-    background: url('../i.svg') ~"0px 60px/60px auto";
+    background: url('../c.svg') ~"0px 0px/58px" auto;
 }
 // Floors
 .f, .bt, #af, .bb {
@@ -41,15 +41,28 @@ body:before {
 
 .f:hover a, .f:focus a {
     color: #9D5548;
-    background: rgba(255,255,255,0.6);
+    background: #000;
 }
 .t {
     margin-top: 100px;
     flex-direction: column;
     min-height: calc(~'100%' - 101px);
     align-items: center;
+    position: relative;
+
     @media all and (-ms-high-contrast:none) {
         height: 1px;
+    }
+    &:before {
+        content: '';
+        position: absolute;
+        height: 42px;
+        width: 40px;
+        background: white;
+        z-index: 10;
+        margin-left: -130px;
+        background: url('../f.svg') ~"-123px -391px/165px" auto no-repeat;
+        bottom: 1px;
     }
 }
 #nc {
@@ -143,7 +156,6 @@ body:before {
     transform:rotate(90deg);
 
     span {
-        background: url(../i.svg) ~"0px -67px/32px auto no-repeat";
         position: absolute;
         left: 0;
         height: 100%;
@@ -165,5 +177,79 @@ body:before {
         }
     }
 }
-#zw {color: #00FF00;}
-#zc {color: white;}
+.vp {color: green;}
+.vn {color: red;}
+#c1, #c2, #c3, #c4 {
+    position: absolute;
+    display: block;
+    top: 100px;
+    left: 0;
+    opacity: 0.6;
+    z-index: 1;
+    animation: 50s linear infinite cl;
+}
+@keyframes cl {
+    0% {margin-left: 0;}
+    100% {margin-left: 120%;}
+}
+#c1 {
+    left: -172px;
+    height: 100px;
+    width: 172px;
+    background: url(../f.svg) ~"-42px -1800px/749px";
+    animation-duration: 40s;
+}
+#c2 {
+    display: none;
+}
+#c3 {
+    top: 200px;
+    left: -200px;
+    width: 200px;
+    height: 140px;
+    background: url(../f.svg) ~"-264px -1851px/749px";
+    animation-duration: 30s;
+}
+#c4 {
+    top: 50px;
+    left: -133px;
+    width: 133px;
+    height: 70px;
+    background: url(../f.svg) ~"-114px -936px/379px";
+}
+#s1, #s2, #s3, #s4 {
+    position: absolute;
+    height: 2px;
+    width: 2px;
+    display: block;
+    top: 100px;
+    left: 100px;
+    background: white;
+    animation: 3s linear infinite st;
+    transition: opacity 3s;
+    opacity: 0;
+
+    .dt & {animation: none;}
+}
+@keyframes st {
+    0% {opacity: 1;}
+    50% {opacity: 0.3;}
+    100% {opacity: 1;}
+}
+#s2 {
+    top: 350px;
+    left: 20%;
+    animation-delay: 0.1s;
+}
+#s3 {
+    top: 110px;
+    left: 80%;
+    animation-delay: 0.2s;
+}
+#s4 {
+    top: 230px;
+    left: 90%;
+    animation-delay: 0.3s;
+}
+#zp {color: white;}
+#nt { position: relative; left: -10px;}

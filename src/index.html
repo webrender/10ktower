@@ -8,17 +8,17 @@
 <script src="vars.js?__inline=true"></script>
 <script src="base.js?__inline=true"></script>
 <style>
-body {background-position: 0 {{backgroundPositionFb}};}
-body {background-position: 0 {{backgroundPosition}};}
+body {background-position: 0 {{backgroundPositionFb}} }
+body {background-position: 0 {{backgroundPosition}} }
 </style>
 </head>
 <body>
 <center id="sb">
-    <span>Pop: <span id="zp">{{population}}</span></span>
+    <span style="color: orange;">Pop: <span id="zp">{{population}}</span></span>
     <span aria-hidden="true" class="lo"> | </span>
     <span id="zd">{{dateString}}</span>
     <span aria-hidden="true" class="lo"> | </span>
-    <span id="zw">$<span id="zc">{{cashF}}</span></span>
+    <span class="{{cashClass}}">$<span id="zc">{{cashF}}</span></span>
     <span aria-hidden="true" class="lo"> |</span>
     <span id="nt"><a href="/{{tid}}/?t=1&l={{l}}&rn={{rn}}">Next Turn (+12h)</a></span>
 </center>
