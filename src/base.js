@@ -193,9 +193,9 @@ document.addEventListener('DOMContentLoaded', function() {
 			ef = 1;
 		var et = (ef - p > 0 ? ef - p : p - ef)*.25;
 		var ep = (ef-1)*41 + 1;
-		document.styleSheets[0].insertRule('.t:before {transition: bottom linear '+et+'s}',0);
+		document.styleSheets[1].insertRule('.t:before {transition: bottom linear '+et+'s}',0);
 		setTimeout(function() {
-			document.styleSheets[0].insertRule('.t:before {bottom: '+ep+'px}',0);
+			document.styleSheets[1].insertRule('.t:before {bottom: '+ep+'px}',0);
 		}, 100);
 		setTimeout(elevator, (et+5)*1000);
 	};
@@ -212,8 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		sk.appendChild(s);
 	}
 	document.body.appendChild(sk);
-
-
 
 	gt('/');
 	ssp(ls);
