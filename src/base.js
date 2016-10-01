@@ -201,14 +201,17 @@ document.addEventListener('DOMContentLoaded', function() {
 	};
 	elevator();
 
+	var sk = document.createElement('div');
+	sk.id = 'sk';
 	for (var i=1; i < 5; i++){
 		var c = document.createElement('div');
 		var s = document.createElement('div');
 		c.id = ('c'+i);
 		s.id = ('s'+i);
-		document.body.appendChild(c);
-		document.body.appendChild(s);
+		sk.appendChild(c);
+		sk.appendChild(s);
 	}
+	document.body.appendChild(sk);
 
 
 
