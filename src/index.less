@@ -40,10 +40,6 @@ body:before {
     align-items: center;
     position: relative;
 
-    @media all and (-ms-high-contrast:none) {
-        height: 1px;
-    }
-
     &:before {
         content: '';
         position: absolute;
@@ -54,6 +50,9 @@ body:before {
         margin-left: -130px;
         background: url('../f.svg') ~"-123px -391px/165px" auto no-repeat;
         bottom: 1px;
+        @media all and (-ms-high-contrast:none) {
+            margin-left: -150px;
+        }
     }
 }
 #nc {
