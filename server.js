@@ -5,6 +5,14 @@ var fs = require('fs');
 var shortid = require('shortid');
 var cookieParser = require('cookie-parser');
 
+//create towers directory if it doesn't exist yet
+try {
+	fs.mkdirSync('./towers');
+} catch(e) {
+	if ( e.code != 'EEXIST' ) throw e;
+}
+
+
 //  /$$$$$$$                        /$$     /$$
 // | $$__  $$                      | $$    |__/
 // | $$  \ $$  /$$$$$$  /$$   /$$ /$$$$$$   /$$ /$$$$$$$   /$$$$$$
