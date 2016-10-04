@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				// Update pop & cash
 				cn(document.getElementById('zp'), data.pop);
 				cn(document.getElementById('zc'), data.cash);
+				document.getElementById('zc').parentElement.className = data.cash > 0 ? 'vp' : 'vn';
 				h = data.height;
 				document.body.className = data.stars;
 				// Update tower

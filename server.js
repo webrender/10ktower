@@ -88,12 +88,6 @@ app.listen(process.env.PORT, function () {
 //                          |__/
 
 // Derive time periods from ticks
-var t_daytime = function(tower){
-	var tickDate = new Date(tower.ticks);
-	if (tickDate.getHours() < 6 || tickDate.getHours() > 18)
-		return false;
-	return true;
-};
 var t_nighttime = function(tower){
 	var tickDate = new Date(tower.ticks);
 	if (tickDate.getHours() < 6 || tickDate.getHours() > 18)
@@ -153,7 +147,7 @@ var pop = function(tower, idx) {
 				return 0;
 			}
 		case 'Office':
-			if (!tower.floors[idx].tenants.occupied && t_nighttime) {
+			if (!tower.floors[idx].tenants.occupied && t_nighttime(tower)) {
 				return 0;
 			} else {
 				return 6;
@@ -535,10 +529,10 @@ var tick = function(req, res, skip) {
 			// calculate rents based on the updated tower
 			if (!skip) {
 				var inc = rev(tower, i);
-				if (inc.daily && t_nighttime) {
+				if (inc.daily && t_nighttime(tower)) {
 					revenue += inc.amount;
 				}
-				if (inc.quarter && t_quarter) {
+				if (inc.quarter && t_quarter(tower)) {
 					revenue += inc.amount;
 				}
 			}
@@ -555,20 +549,20 @@ var tick = function(req, res, skip) {
 				case 'Condo':
 					switch (tower.floors[i].tenants.qol) {
 					case 'Bad':
-						if (tower.floors[i].tenants.occupied && t_quarter && r75()) {
+						if (tower.floors[i].tenants.occupied && t_quarter(tower) && r75()) {
 							tower.floors[i].tenants.occupied = false;
 							revenue -= 100000;
 						}
 						break;
 					case 'Neutral':
-						if (!tower.floors[i].tenants.occupied && t_quarter && r75()) {
+						if (!tower.floors[i].tenants.occupied && t_quarter(tower) && r75()) {
 							tower.floors[i].tenants.occupied = true;
 							revenue += 100000;
 
 						}
 						break;
 					case 'Good':
-						if (!tower.floors[i].tenants.occupied && t_quarter) {
+						if (!tower.floors[i].tenants.occupied && t_quarter(tower)) {
 							tower.floors[i].tenants.occupied = true;
 							revenue += 100000;
 						}
@@ -578,17 +572,17 @@ var tick = function(req, res, skip) {
 				case 'Office':
 					switch (tower.floors[i].tenants.qol) {
 					case 'Bad':
-						if (tower.floors[i].tenants.occupied && t_quarter && r75()) {
+						if (tower.floors[i].tenants.occupied && t_quarter(tower) && r75()) {
 							tower.floors[i].tenants.occupied = false;
 						}
 						break;
 					case 'Neutral':
-						if (!tower.floors[i].tenants.occupied && t_quarter && r75()) {
+						if (!tower.floors[i].tenants.occupied && t_quarter(tower) && r75()) {
 							tower.floors[i].tenants.occupied = true;
 						}
 						break;
 					case 'Good':
-						if (!tower.floors[i].tenants.occupied && t_quarter) {
+						if (!tower.floors[i].tenants.occupied && t_quarter(tower)) {
 							tower.floors[i].tenants.occupied = true;
 						}
 						break;
@@ -597,12 +591,12 @@ var tick = function(req, res, skip) {
 				case 'Hotel':
 					switch (tower.floors[i].tenants.qol) {
 					case 'Bad':
-						if (tower.floors[i].tenants.occupied && t_nighttime && r75()) {
+						if (tower.floors[i].tenants.occupied && t_nighttime(tower) && r75()) {
 							tower.floors[i].tenants.occupied = false;
 						}
 						break;
 					case 'Neutral':
-						if (t_nighttime) {
+						if (t_nighttime(tower)) {
 							if (r75()) {
 								tower.floors[i].tenants.occupied = true;
 							} else {
@@ -611,7 +605,7 @@ var tick = function(req, res, skip) {
 						}
 						break;
 					case 'Good':
-						if (!tower.floors[i].tenants.occupied && t_nighttime) {
+						if (!tower.floors[i].tenants.occupied && t_nighttime(tower)) {
 							tower.floors[i].tenants.occupied = true;
 						}
 						break;
@@ -1052,7 +1046,7 @@ var index = function(req, res, error) {
 				res.json({
 					pop: tower.population,
 					time: tower.dateString,
-					cash: tower.cashF(),
+					cash: tower.cash,
 					height: tower.height,
 					stars: tower.stars,
 					tower: html,
