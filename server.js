@@ -342,10 +342,14 @@ var tick = function(req, res, skip) {
 			Housekeeping: 1,
 			Shop: 1,
 			Security: 1,
-			Theatre: 1
+			Theatre: 1,
+			Total:1
 		};
 		for (var i=0; i<tower.floors.length; i++) {
-			fc[tower.floors[i].type]++;
+			if (tower.floors[i].type){
+				fc[tower.floors[i].type]++;
+				fc.Total++;
+			}
 		}
 		// loop through the floors and do QoL calcs, move tenants in/out
 		// based on QoL
@@ -380,20 +384,20 @@ var tick = function(req, res, skip) {
 						qolComments.push('There\'s lots of activities!');
 					}
 					// needs high enough police ratio
-					if (tower.floors.length / fc.Security > 50) {
+					if (fc.Total / fc.Security > 50) {
 						qolScore--;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
+					if (fc.Total > 50 && (fc.Total / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe in my home.');
 					}
 					// needs high enough medical ratio
-					if (tower.floors.length / fc.Medical > 100) {
+					if (fc.Total / fc.Medical > 100) {
 						qolScore -= 3;
 						qolComments.push('It takes too long to see a doctor.');
 					}
-					if (tower.floors.length > 100 && (tower.floors.length / fc.Medical < 40)) {
+					if (fc.Total > 100 && (fc.Total / fc.Medical < 40)) {
 						qolScore++;
 						qolComments.push('This building has excellent medical care.');
 					}
@@ -418,11 +422,11 @@ var tick = function(req, res, skip) {
 						qolComments.push ('There\s plenty of food places around here.');
 					}
 					// needs high enough police ratio
-					if (tower.floors.length / fc.Security > 50) {
+					if (fc.Total / fc.Security > 50) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
+					if (fc.Total > 50 && (fc.Total / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -444,11 +448,12 @@ var tick = function(req, res, skip) {
 						qolComments.push('It\'s too noisy.');
 					}
 					// needs enough commerical properties
-					if ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3 && r75()) {
+					console.log(fc.Total, (fc.Total / (fc.Restaurant + fc.Shop + fc.Theatre)));
+					if ((fc.Total / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3 && r75()) {
 						qolScore--;
 						qolComments.push('There\'s not enough to do in this Tower.');
 					}
-					if ((tower.floors.length / (fc.Restaurant + fc.Shop + fc.Theatre)) < 2.5) {
+					if ((fc.Total / (fc.Restaurant + fc.Shop + fc.Theatre)) < 2.5) {
 						qolScore++;
 						qolComments.push('Lots to do here!');
 					}
@@ -464,11 +469,11 @@ var tick = function(req, res, skip) {
 						qolComments.push('Plenty of business!');
 					}
 					// needs high enough police ratio
-					if (tower.floors.length / fc.Security > 50) {
+					if (fc.Total / fc.Security > 50) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
+					if (fc.Total > 50 && (fc.Total / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -484,11 +489,11 @@ var tick = function(req, res, skip) {
 						qolComments.push('Plenty of business!');
 					}
 					// needs high enough police ratio
-					if (tower.floors.length / fc.Security > 50) {
+					if (fc.Total / fc.Security > 50) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
+					if (fc.Total > 50 && (fc.Total / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
@@ -505,11 +510,11 @@ var tick = function(req, res, skip) {
 						qolComments.push('Plenty of business!');
 					}
 					// needs high enough police ratio
-					if (tower.floors.length / fc.Security > 50) {
+					if (fc.Total / fc.Security > 50) {
 						qolScore -= 3;
 						qolComments.push('It\'s not safe in this building.');
 					}
-					if (tower.floors.length > 50 && (tower.floors.length / fc.Security < 20)) {
+					if (fc.Total > 50 && (fc.Total / fc.Security < 20)) {
 						qolScore++;
 						qolComments.push('I feel safe here.');
 					}
