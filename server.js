@@ -448,7 +448,6 @@ var tick = function(req, res, skip) {
 						qolComments.push('It\'s too noisy.');
 					}
 					// needs enough commerical properties
-					console.log(fc.Total, (fc.Total / (fc.Restaurant + fc.Shop + fc.Theatre)));
 					if ((fc.Total / (fc.Restaurant + fc.Shop + fc.Theatre)) > 3 && r75()) {
 						qolScore--;
 						qolComments.push('There\'s not enough to do in this Tower.');
